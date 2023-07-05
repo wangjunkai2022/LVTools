@@ -1,7 +1,7 @@
 #!/bin/bash
 # 安装docker和所有工具到服务器
 cd ~
-# run sh -c "$(curl -fsSL https://raw.githubusercontent.com/wangjunkai2022/xiaokaiTools/main/server_docker_videos.sh)"
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/wangjunkai2022/LVTools/master/install_tools.sh)"
 sudo apt update
 sudo apt install docker.io
 sudo docker pull linuxserver/prowlarr
@@ -40,8 +40,7 @@ sudo docker run -d --name=ombi -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC -e BASE_U
 
 mkdir -p ~/videos/tools/chinesesubfinder/config
 mkdir -p ~/videos/tools/chinesesubfinder/browser
-
-sudo docker run -d --name chinesesubfinder -v ~/videos/tools/chinesesubfinder/config:/config -v ~/videos/data/电影:/电影 -v ~/videos/data/电视:/电视 -v ~/videos/tools/chinesesubfinder/browser:/root/.cache/rod/browser -e PUID=1026 -e PGID=100 -e PERMS=true -e TZ=Asia/Shanghai -e UMASK=022 -p 19035:19035 -p 19037:19037 --hostname chinesesubfinder --log-driver "json-file" --log-opt "max-size=10m" ChineseSubFinder/ChineseSubFinder
+sudo docker run -d --name chinesesubfinder -v ~/videos/tools/chinesesubfinder/config:/config -v ~/videos/data/电影:/电影 -v ~/videos/data/电视:/电视 -v ~/videos/tools/chinesesubfinder/browser:/root/.cache/rod/browser -e PUID=1000 -e PGID=100 -e PERMS=true -e TZ=Asia/Shanghai -e UMASK=022 -p 19035:19035 -p 19037:19037 --log-driver "json-file" --log-opt "max-size=10m" ChineseSubFinder/ChineseSubFinder
 
 mkdir -p ~/videos/tools/bazarr
 sudo docker run -d --name=bazarr -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC -p 6767:6767 -v ~/videos/tools/bazarr:/config -v ~/videos/data/电影:/movies -v ~/videos/data/电视:/tv --restart always lscr.io/linuxserver/bazarr:latest
