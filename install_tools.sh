@@ -10,53 +10,58 @@ function docker_install() {
   else
     echo "安装docker环境..."
     sudo apt update
-    sudo apt install docker.io
+    sudo apt install davfs2 -y
+    sudo apt install docker.io -y
     echo "安装docker环境...安装完成!"
     echo "开始重启电脑"
-    sudo poweroff
+    sudo reboot
   fi
 }
 docker_install
 
 echo "开始安装Video需要的docker插件"
 
-sudo docker pull linuxserver/prowlarr
-sudo docker pull linuxserver/sonarr
-sudo docker pull linuxserver/radarr
-sudo docker pull p3terx/aria2-pro
-sudo docker pull emby/embyserver
-sudo docker pull portainer/portainer-ce
-sudo docker pull linuxserver/ombi
-sudo docker pull allanpk716/chinesesubfinder:latest
-sudo docker pull linuxserver/bazarr
+docker pull linuxserver/prowlarr
+docker pull linuxserver/sonarr
+docker pull linuxserver/radarr
+docker pull p3terx/aria2-pro
+docker pull emby/embyserver
+docker pull portainer/portainer-ce
+docker pull linuxserver/ombi
+docker pull allanpk716/chinesesubfinder
+docker pull linuxserver/bazarr
+docker pull xhofe/alist
 
-sudo docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce
+docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce
 
 mkdir -p ~/videos/data/电影
 mkdir -p ~/videos/data/电视
 mkdir -p ~/videos/data/下载
 
 mkdir -p ~/videos/tools/prowlarr
-sudo docker run -d --name=prowlarr -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC -p 9696:9696 -v ~/videos/tools/prowlarr:/config --restart always linuxserver/prowlarr
+docker run -d --name=prowlarr -p 9696:9696 -v ~/videos/tools/prowlarr:/config --restart always linuxserver/prowlarr
 
 mkdir -p ~/videos/tools/sonarr
-sudo docker run -d --name=sonarr -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC -p 8989:8989 -v ~/videos/tools/sonarr:/config -v ~/videos/data/电视:/电视 -v ~/videos/data/下载:/下载 --restart always linuxserver/sonarr
+docker run -d --name=sonarr -p 8989:8989 -v ~/videos/tools/sonarr:/config -v ~/videos/data/电视:/media/电视 -v ~/videos/data/下载:/mnt/下载 --restart always linuxserver/sonarr
 
 mkdir -p ~/videos/tools/radarr
-sudo docker run -d --name=radarr -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC -p 7878:7878 -v ~/videos/tools/radarr:/config -v ~/videos/data/电影:/电影 -v ~/videos/data/下载:/下载 --restart always linuxserver/radarr
+docker run -d --name=radarr -p 7878:7878 -v ~/videos/tools/radarr:/config -v ~/videos/data/电影:/media/电影 -v ~/videos/data/下载:/mnt/下载 --restart always linuxserver/radarr
 
 mkdir -p ~/videos/tools/aria2
-sudo docker run -d --name aria2-pro --restart always --log-opt max-size=1m -e RPC_PORT=6800 -p 6800:6800 -e LISTEN_PORT=6888 -p 6888:6888 -p 6888:6888/udp -v ~/videos/tools/aria2:/config -v ~/videos/data/下载:/downloads p3terx/aria2-pro
+docker run -d --name aria2-pro --restart always --log-opt max-size=1m -e RPC_PORT=6800 -p 6800:6800 -p 6888:6888 -p 6888:6888/udp -v ~/videos/tools/aria2:/config -v ~/videos/data/下载:/downloads p3terx/aria2-pro
 
 mkdir -p ~/videos/tools/embyserver
-sudo docker run -d --name embyserver -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC -v ~/videos/tools/embyserver:/config -v ~/videos/data/电视:/mnt/电视 -v ~/videos/data/电影:/mnt/电影 -p 8096:8096 -p 8920:8920 --env UID=1000 --env GID=1000 --restart always emby/embyserver
+docker run -d --name embyserver -v ~/videos/tools/embyserver:/config -v ~/videos/data/电视:/media/电视 -v ~/videos/data/电影:/media/电影 -p 8096:8096 -p 8920:8920 --restart always emby/embyserver
 
 mkdir -p ~/videos/tools/ombi
-sudo docker run -d --name=ombi -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC -e BASE_URL=/ombi -p 3579:3579 -v ~/videos/tools/ombi:/config --restart always linuxserver/ombi
+docker run -d --name=ombi -e BASE_URL=/ombi -p 3579:3579 -v ~/videos/tools/ombi:/config --restart always linuxserver/ombi
 
 mkdir -p ~/videos/tools/chinesesubfinder/config
 mkdir -p ~/videos/tools/chinesesubfinder/browser
-sudo docker run -d --name chinesesubfinder -v ~/videos/tools/chinesesubfinder/config:/config -v ~/videos/data/电影:/media/电影 -v ~/videos/data/电视:/media/电视 -v ~/videos/tools/chinesesubfinder/browser:/root/.cache/rod/browser -e PUID=1000 -e PGID=100 -e PERMS=true -e TZ=Asia/Shanghai -e UMASK=022 -p 19035:19035 -p 19037:19037 --log-driver "json-file" --log-opt "max-size=10m" allanpk716/chinesesubfinder:latest
+docker run -d --name chinesesubfinder -v ~/videos/tools/chinesesubfinder/config:/config -v ~/videos/data/电影:/media/电影 -v ~/videos/data/电视:/media/电视 -v ~/videos/tools/chinesesubfinder/browser:/root/.cache/rod/browser -p 19035:19035 -p 19037:19037 --log-driver "json-file" --log-opt "max-size=10m" --restart=always allanpk716/chinesesubfinder
 
 mkdir -p ~/videos/tools/bazarr
-sudo docker run -d --name=bazarr -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC -p 6767:6767 -v ~/videos/tools/bazarr:/config -v ~/videos/data/电影:/movies -v ~/videos/data/电视:/tv --restart always linuxserver/bazarr
+docker run -d --name=bazarr -p 6767:6767 -v ~/videos/tools/bazarr:/config -v ~/videos/data/电影:/media/电影 -v ~/videos/data/电视:/media/电视 --restart always linuxserver/bazarr
+
+mkdir -p ~/videos/tools/alist
+docker run -d --restart=always -v ~/videos/tools/alist:/opt/alist/data -p 5244:5244 --name="alist" xhofe/alist
