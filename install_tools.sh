@@ -33,6 +33,7 @@ docker pull linuxserver/ombi:latest
 docker pull allanpk716/chinesesubfinder:latest
 docker pull linuxserver/bazarr:latest
 docker pull xhofe/alist
+docker pull linuxserver/jackett
 
 docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce
 
@@ -67,3 +68,6 @@ docker run -d --name=bazarr -e uid=$uid -p 6767:6767 -v ~/videos/tools/bazarr:/c
 
 mkdir -p ~/videos/tools/alist
 docker run -d --restart=always -v ~/videos/tools/alist:/opt/alist/data -p 5244:5244 --name="alist" xhofe/alist
+
+mkdir -p ~/videos/tools/jackett
+docker run -d --name=jackett --restart=always -e uid=$uid -v ~/videos/tools/jackett:/config -p 9117:9117 linuxserver/jackett
