@@ -27,13 +27,15 @@ docker pull linuxserver/prowlarr:latest
 docker pull linuxserver/sonarr:latest
 docker pull linuxserver/radarr:latest
 docker pull p3terx/aria2-pro
-docker pull emby/embyserver:latest
+#docker pull emby/embyserver:latest
+docker pull linuxserver/emby:latest
 docker pull portainer/portainer-ce
 docker pull linuxserver/ombi:latest
 docker pull allanpk716/chinesesubfinder:latest
 docker pull linuxserver/bazarr:latest
 docker pull xhofe/alist
 docker pull linuxserver/jackett
+docker pull v2fly/v2fly-core
 
 docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce
 
@@ -54,7 +56,8 @@ mkdir -p ~/videos/tools/aria2
 docker run -d --name aria2-pro -e uid=$uid --restart always --log-opt max-size=1m -e RPC_PORT=6800 -p 6800:6800 -p 6888:6888 -p 6888:6888/udp -v ~/videos/tools/aria2:/config -v ~/videos/downloads:/downloads p3terx/aria2-pro
 
 mkdir -p ~/videos/tools/embyserver
-docker run -d --name embyserver -e uid=$uid -v ~/videos/tools/embyserver:/config -v ~/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always emby/embyserver
+#docker run -d --name embyserver -e uid=$uid -v ~/videos/tools/embyserver:/config -v ~/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always emby/embyserver
+docker run -d --name embyserver -e uid=$uid -v ~/videos/tools/embyserver:/config -v ~/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always linuxserver/emby
 
 mkdir -p ~/videos/tools/ombi
 docker run -d --name=ombi -e BASE_URL=/ombi -p 3579:3579 -v ~/videos/tools/ombi:/config --restart always linuxserver/ombi
@@ -71,3 +74,6 @@ docker run -d --restart=always -v ~/videos/tools/alist:/opt/alist/data -p 5244:5
 
 mkdir -p ~/videos/tools/jackett
 docker run -d --name=jackett --restart=always -e uid=$uid -v ~/videos/tools/jackett:/config -p 9117:9117 linuxserver/jackett
+
+mkdir -p ~/videos/tools/v2ray
+docker run -d --name=v2ray --restart=always -e uid=$uid -v ~/videos/tools/v2ray:/config -p 10808:10808 -p 10809:10809 v2fly/v2fly-core run -c /config/config.json
