@@ -60,7 +60,9 @@ mkdir -p ~/videos/tools/embyserver
 docker run -d --name embyserver -e uid=$uid -v ~/videos/tools/embyserver:/config -v ~/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always linuxserver/emby
 
 mkdir -p ~/videos/tools/ombi
-docker run -d --name=ombi -e BASE_URL=/ombi -p 3579:3579 -v ~/videos/tools/ombi:/config --restart always linuxserver/ombi
+echo -e "Ombi在大陆无法连接网络 请输入代理。。 \n直接输入代理地址和端口 \n如果不用则直接输入回车"
+read proxy_ip
+docker run -d --name=ombi --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e BASE_URL=/ombi -p 3579:3579 -v ~/videos/tools/ombi:/config --restart always linuxserver/ombi
 
 mkdir -p ~/videos/tools/chinesesubfinder/config
 mkdir -p ~/videos/tools/chinesesubfinder/browser
