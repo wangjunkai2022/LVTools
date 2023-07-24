@@ -9,4 +9,4 @@ docker pull vergilgao/mdc:latest
 rm -rf ~/mdc_config
 mkdir -p -m 777 ~/mdc_config
 cp $(dirname $0)/mdc.ini ~/mdc_config/
-docker run --rm --name mdc_test -it -v ~/videos:/videos -v ~/config:/config -e UID=1000 -e GID=1000 ghcr.io/vergilgao/mdc:latest
+docker run --rm --name mdc_test -it -v ~/videos:/videos -v ~/mdc_config:/config -e UID=1000 -e GID=1000 ghcr.io/vergilgao/mdc:latest
