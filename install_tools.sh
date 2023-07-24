@@ -57,7 +57,7 @@ docker run -d --name aria2-pro -e uid=$uid --restart always --log-opt max-size=1
 
 mkdir -p ~/videos/tools/embyserver
 #docker run -d --name embyserver -e uid=$uid -v ~/videos/tools/embyserver:/config -v ~/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always emby/embyserver
-docker run -d --name embyserver -e uid=$uid -v ~/videos/tools/embyserver:/config -v ~/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always linuxserver/emby
+docker run -d --name embyserver -e uid=$uid --device /dev/dri:/dev/dri -v ~/videos/tools/embyserver:/config -v ~/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always linuxserver/emby
 
 mkdir -p ~/videos/tools/ombi
 echo -e "Ombi在大陆无法连接网络 请输入代理。。 \n直接输入代理地址和端口 \n如果不用则直接输入回车"
