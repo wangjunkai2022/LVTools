@@ -66,7 +66,7 @@ docker run -d --name=ombi --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy
 
 mkdir -p ~/videos/tools/chinesesubfinder/config
 mkdir -p ~/videos/tools/chinesesubfinder/browser
-docker run -d --name chinesesubfinder -v -e uid=$uid ~/videos/tools/chinesesubfinder/config:/config -v ~/videos/media:/media -v ~/videos/tools/chinesesubfinder/browser:/root/.cache/rod/browser -p 19035:19035 -p 19037:19037 --log-driver "json-file" --log-opt "max-size=10m" --restart=always allanpk716/chinesesubfinder
+docker run -d --name chinesesubfinder -e uid=$uid -v ~/videos/tools/chinesesubfinder/config:/config -v ~/videos/media:/media -v ~/videos/tools/chinesesubfinder/browser:/root/.cache/rod/browser -p 19035:19035 -p 19037:19037 --log-driver "json-file" --log-opt "max-size=10m" --restart=always allanpk716/chinesesubfinder
 
 mkdir -p ~/videos/tools/bazarr
 docker run -d --name=bazarr -e uid=$uid -p 6767:6767 -v ~/videos/tools/bazarr:/config -v ~/videos/media:/media --restart always linuxserver/bazarr
