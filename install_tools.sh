@@ -23,7 +23,7 @@ mkdir -p ~/videos/tools/ombi
 echo -e "Ombi 和 emby 在大陆无法连接网络 请输入代理。。 \n直接输入代理地址和端口 \n如果不用则直接输入回车"
 read proxy_ip
 
-uid=1000
+uid=0 #使用root的身份 防止有些没有权限
 #gid=1000
 echo "开始安装Video需要的docker插件"
 
@@ -37,7 +37,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 prowlarr ..."
   docker pull linuxserver/prowlarr:latest
   mkdir -p ~/videos/tools/prowlarr
-  docker run -d --name=prowlarr -p 9696:9696 -v ~/videos/tools/prowlarr:/config --restart always linuxserver/prowlarr
+  docker run -d --name=prowlarr -e uid=$uid -p 9696:9696 -v ~/videos/tools/prowlarr:/config --restart always linuxserver/prowlarr
 else
   echo "prowlarr 容器已存在 不用创建"
 fi
@@ -109,7 +109,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 ombi ..."
   docker pull linuxserver/ombi:latest
   mkdir -p ~/videos/tools/ombi
-  docker run -d --name=ombi --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e BASE_URL=/ombi -p 3579:3579 -v ~/videos/tools/ombi:/config --restart always linuxserver/ombi
+  docker run -d --name=ombi -e uid=$uid --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e BASE_URL=/ombi -p 3579:3579 -v ~/videos/tools/ombi:/config --restart always linuxserver/ombi
 
 else
   echo "ombi 容器已存在 不用创建"
@@ -146,7 +146,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 alist ..."
   docker pull xhofe/alist
   mkdir -p ~/videos/tools/alist
-  docker run -d --restart=always -v ~/videos/tools/alist:/opt/alist/data -p 5244:5244 --name="alist" xhofe/alist
+  docker run -d --restart=always -e uid=$uid -v ~/videos/tools/alist:/opt/alist/data -p 5244:5244 --name="alist" xhofe/alist
 
 else
   echo "alist 容器已存在 不用创建"
@@ -173,4 +173,16 @@ if [ -z "$container" ]; then
   docker run -d --name=v2ray --restart=always -e uid=$uid -v ~/videos/tools/v2ray:/config -p 10808:10808 -p 10809:10809 v2fly/v2fly-core run -c /config/config.json
 else
   echo "v2ray 容器已存在 不用创建"
+fi
+
+# 检查容器是否存在 qbittorrent
+container=$(docker ps -q -f name="qbittorrent")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 qbittorrent ..."
+  docker pull linuxserver/qbittorrent
+  mkdir -p ~/videos/tools/qbittorrent
+  docker run -d --name=qbittorrent --restart=always -e uid=$uid -p 8080:8080 -p 6881:6881 -p 6881:6881/udp -v ~/videos/tools/qbittorrent:/config -v ~/videos/downloads:/downloads linuxserver/qbittorrent
+
+else
+  echo "qbittorrent 容器已存在 不用创建"
 fi
