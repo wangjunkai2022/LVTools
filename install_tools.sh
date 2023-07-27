@@ -179,9 +179,10 @@ fi
 container=$(docker ps -q -f name="qbittorrent")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qbittorrent ..."
-  docker pull linuxserver/qbittorrent
+  #  docker pull linuxserver/qbittorrent
+  docker pull nevinee/qbittorrent
   mkdir -p ~/videos/tools/qbittorrent
-  docker run -d --name=qbittorrent --restart=always -e uid=$uid -p 8080:8080 -p 6881:6881 -p 6881:6881/udp -v ~/videos/tools/qbittorrent:/config -v ~/videos/downloads:/downloads linuxserver/qbittorrent
+  docker run -d --name=qbittorrent --restart=always -e uid=$uid -p 8080:8080 -p 6881:6881 -p 6881:6881/udp -v ~/videos/tools/qbittorrent:/config -v ~/videos/downloads:/downloads nevinee/qbittorrent
 
 else
   echo "qbittorrent 容器已存在 不用创建"
