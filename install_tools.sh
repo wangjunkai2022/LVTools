@@ -179,11 +179,11 @@ fi
 container=$(docker ps -q -f name="qbittorrent")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qbittorrent ..."
-  #  docker pull linuxserver/qbittorrent
-  docker pull nevinee/qbittorrent
+  docker pull linuxserver/qbittorrent
+  #  docker pull nevinee/qbittorrent
   mkdir -p ~/videos/tools/qbittorrent
-#  docker run -d --name=qbittorrent --restart=always -e uid=$uid -p 8080:8080 -p 6881:6881 -p 6881:6881/udp -v ~/videos/tools/qbittorrent:/config -v ~/videos/downloads:/downloads linuxserver/qbittorrent
-  docker run -dit -v ~/videos/tools/qbittorrent:/data -v ~/videos/downloads:/downloads -e PUID=$uid -e PGID=$uid -e WEBUI_PORT="8080" -e BT_PORT="34567" -p 8080:8080 -p 34567:34567/tcp -p 34567:34567/udp --tmpfs /tmp --restart always --name qbittorrent --hostname qbittorrent nevinee/qbittorrent
+  docker run -d --name=qbittorrent --restart=always -e uid=$uid -p 8080:8080 -p 6881:6881 -p 6881:6881/udp -v ~/videos/tools/qbittorrent:/config -v ~/videos/downloads:/downloads linuxserver/qbittorrent
+#  docker run -dit -v ~/videos/tools/qbittorrent:/data -v ~/videos/downloads:/downloads -e PUID=$uid -e PGID=$uid -e WEBUI_PORT="8080" -e BT_PORT="34567" -p 8080:8080 -p 34567:34567/tcp -p 34567:34567/udp --tmpfs /tmp --restart always --name qbittorrent --hostname qbittorrent nevinee/qbittorrent
 else
   echo "qbittorrent 容器已存在 不用创建"
 fi
