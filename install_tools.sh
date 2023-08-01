@@ -29,7 +29,7 @@ echo "开始安装Video需要的docker插件"
 
 mkdir -p -m 777 /data/videos/media/movie
 mkdir -p -m 777 /data/videos/media/series
-mkdir -p -m 777 /data/videos/downloads
+mkdir -p -m 777 /data/videos/media/downloads
 
 # 检查容器是否存在 prowlarr
 container=$(docker ps -q -f name="prowlarr")
@@ -58,7 +58,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 sonarr ..."
   docker pull linuxserver/sonarr:latest
   mkdir -p -m 777 /data/videos/tools/sonarr
-  docker run -d --name=sonarr -e PUID=$uid -e PGID=$gid -p 8989:8989 -v /data/videos/tools/sonarr:/config -v /data/videos/media:/data/media -v /data/videos/downloads:/data/downloads --restart always linuxserver/sonarr
+  docker run -d --name=sonarr -e PUID=$uid -e PGID=$gid -p 8989:8989 -v /data/videos/tools/sonarr:/config -v /data/videos/media:/media --restart always linuxserver/sonarr
 
 else
   echo "sonarr 容器已存在 不用创建"
@@ -70,7 +70,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 radarr ..."
   docker pull linuxserver/radarr:latest
   mkdir -p -m 777 /data/videos/tools/radarr
-  docker run -d --name=radarr -e PUID=$uid -e PGID=$gid -p 7878:7878 -v /data/videos/tools/radarr:/config -v /data/videos:/data --restart always linuxserver/radarr
+  docker run -d --name=radarr -e PUID=$uid -e PGID=$gid -p 7878:7878 -v /data/videos/tools/radarr:/config -v /data/videos/media:/media --restart always linuxserver/radarr
 
 else
   echo "radarr 容器已存在 不用创建"
@@ -82,7 +82,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 aria2-pro ..."
   docker pull p3terx/aria2-pro
   mkdir -p -m 777 /data/videos/tools/aria2
-  docker run -d --name aria2-pro -e PUID=$uid -e PGID=$gid --restart always --log-opt max-size=1m -e RPC_PORT=6800 -p 6800:6800 -p 6888:6888 -p 6888:6888/udp -v /data/videos/tools/aria2:/config -v /data/videos/downloads:/downloads p3terx/aria2-pro
+  docker run -d --name aria2-pro -e PUID=$uid -e PGID=$gid --restart always --log-opt max-size=1m -e RPC_PORT=6800 -p 6800:6800 -p 6888:6888 -p 6888:6888/udp -v /data/videos/tools/aria2:/config -v /data/videos/media/downloads:/downloads p3terx/aria2-pro
 
 else
   echo "aria2-pro 容器已存在 不用创建"
@@ -181,7 +181,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qbittorrent ..."
   docker pull linuxserver/qbittorrent
   mkdir -p -m 777 /data/videos/tools/qbittorrent
-  docker run -d --name=qbittorrent --restart=always -e umask=0000 -e PUID=$uid -e PGID=$gid -p 8080:8080 -p 23456:23456 -p 23456:23456/udp -v /data/videos/tools/qbittorrent:/config -v /data/videos/downloads:/data/downloads linuxserver/qbittorrent
+  docker run -d --name=qbittorrent --restart=always -e umask=0000 -e PUID=$uid -e PGID=$gid -p 8080:8080 -p 23456:23456 -p 23456:23456/udp -v /data/videos/tools/qbittorrent:/config -v /data/videos/media/downloads:/downloads linuxserver/qbittorrent
 else
   echo "qbittorrent 容器已存在 不用创建"
 fi
