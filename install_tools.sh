@@ -70,7 +70,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 radarr ..."
   docker pull linuxserver/radarr:latest
   mkdir -p -m 777 /data/videos/tools/radarr
-  docker run -d --name=radarr -e PUID=$uid -e PGID=$gid -p 7878:7878 -v /data/videos/tools/radarr:/config -v /data/videos/media:/data/media -v /data/videos/downloads:/data/downloads --restart always linuxserver/radarr
+  docker run -d --name=radarr -e PUID=$uid -e PGID=$gid -p 7878:7878 -v /data/videos/tools/radarr:/config -v /data/videos:/data --restart always linuxserver/radarr
 
 else
   echo "radarr 容器已存在 不用创建"
