@@ -59,7 +59,6 @@ if [ -z "$container" ]; then
   docker pull linuxserver/sonarr:latest
   mkdir -p -m 777 /data/videos/tools/sonarr
   docker run -d --name=sonarr -e PUID=$uid -e PGID=$gid -p 8989:8989 -v /data/videos/tools/sonarr:/config -v /data/videos/media:/media --restart always linuxserver/sonarr
-
 else
   echo "sonarr 容器已存在 不用创建"
 fi
@@ -71,7 +70,6 @@ if [ -z "$container" ]; then
   docker pull linuxserver/radarr:latest
   mkdir -p -m 777 /data/videos/tools/radarr
   docker run -d --name=radarr -e PUID=$uid -e PGID=$gid -p 7878:7878 -v /data/videos/tools/radarr:/config -v /data/videos/media:/media --restart always linuxserver/radarr
-
 else
   echo "radarr 容器已存在 不用创建"
 fi
@@ -164,15 +162,26 @@ else
   echo "jackett 容器已存在 不用创建"
 fi
 
-# 检查容器是否存在 v2ray ##这个是用来代理的 穿透是另外一个 这里不生成了
-container=$(docker ps -q -f name="v2ray")
+# 检查容器是否存在 v2ray ##这个是用来代理的 穿透是另外一个
+container=$(docker ps -q -f name="proxy_v2ray")
 if [ -z "$container" ]; then
-  echo "容器不存在，正在创建容器 v2ray ..."
+  echo "容器不存在，正在创建容器 proxy_v2ray ..."
   docker pull v2fly/v2fly-core
-  mkdir -p -m 777 /data/videos/tools/v2ray
-  docker run -d --name=v2ray --restart=always -e PUID=$uid -e PGID=$gid -v /data/videos/tools/v2ray:/config -p 10808:10808 -p 10809:10809 v2fly/v2fly-core run -c /config/config.json
+  mkdir -p -m 777 /data/videos/tools/proxy_v2ray
+  docker run -d --name=proxy_v2ray --restart=always -e PUID=$uid -e PGID=$gid -v /data/videos/tools/proxy_v2ray:/config -p 10808:10808 -p 10809:10809 v2fly/v2fly-core run -c /config/config.json
 else
-  echo "v2ray 容器已存在 不用创建"
+  echo "proxy_v2ray 容器已存在 不用创建"
+fi
+
+# 检查容器是否存在 v2ray ##这个是用来穿透内网
+container=$(docker ps -q -f name="nat_v2ray")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 nat_v2ray ..."
+  docker pull v2fly/v2fly-core
+  mkdir -p -m 777 /data/videos/tools/nat_v2ray
+  docker run -d --name=nat_v2ray --restart=always -e PUID=$uid -e PGID=$gid -v /data/videos/tools/nat_v2ray:/config v2fly/v2fly-core run -c /config/config.json
+else
+  echo "nat_v2ray 容器已存在 不用创建"
 fi
 
 # 检查容器是否存在 qbittorrent
@@ -181,7 +190,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qbittorrent ..."
   docker pull linuxserver/qbittorrent
   mkdir -p -m 777 /data/videos/tools/qbittorrent
-  docker run -d --name=qbittorrent --restart=always -e umask=0000 -e PUID=$uid -e PGID=$gid -p 8080:8080 -p 23456:23456 -p 23456:23456/udp -v /data/videos/tools/qbittorrent:/config -v /data/videos/media/downloads:/downloads linuxserver/qbittorrent
+  docker run -d --name=qbittorrent --restart=always -e PUID=$uid -e PGID=$gid -p 8080:8080 -p 23456:23456 -p 23456:23456/udp -v /data/videos/tools/qbittorrent:/config -v /data/videos/media/downloads:/downloads linuxserver/qbittorrent
 else
   echo "qbittorrent 容器已存在 不用创建"
 fi
