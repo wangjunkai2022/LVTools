@@ -106,6 +106,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 embyserver ..."
   #docker pull emby/embyserver:latest
   #docker pull linuxserver/emby:latest
+  #  docker pull zishuo/embyserver
   docker pull xinjiawei1/emby_unlockd
 
   mkdir -p -m 777 /data/videos/tools/embyserver
