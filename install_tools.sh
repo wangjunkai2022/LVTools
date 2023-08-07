@@ -1,6 +1,5 @@
 #!/bin/bash
 # 安装docker和所有工具到服务器
-cd ~
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/wangjunkai2022/LVTools/master/install_tools.sh)"
 function docker_install() {
   echo "检查Docker......"
@@ -27,8 +26,23 @@ uid=0 #使用root的身份 防止有些没有权限
 gid=0
 echo "开始安装Video需要的docker插件"
 
-mkdir -p -m 777 /data/videos/media/movie
-mkdir -p -m 777 /data/videos/media/series
+mkdir -p -m 777 /data/videos/media/movie/大陆
+mkdir -p -m 777 /data/videos/media/movie/香港
+mkdir -p -m 777 /data/videos/media/movie/台湾
+mkdir -p -m 777 /data/videos/media/movie/日本
+mkdir -p -m 777 /data/videos/media/movie/韩国
+mkdir -p -m 777 /data/videos/media/movie/东南亚
+mkdir -p -m 777 /data/videos/media/movie/欧美
+mkdir -p -m 777 /data/videos/media/movie/其他地区
+
+mkdir -p -m 777 /data/videos/media/series/大陆
+mkdir -p -m 777 /data/videos/media/series/香港
+mkdir -p -m 777 /data/videos/media/series/台湾
+mkdir -p -m 777 /data/videos/media/series/日本
+mkdir -p -m 777 /data/videos/media/series/韩国
+mkdir -p -m 777 /data/videos/media/series/东南亚
+mkdir -p -m 777 /data/videos/media/series/欧美
+mkdir -p -m 777 /data/videos/media/series/其他地区
 mkdir -p -m 777 /data/videos/media/downloads
 
 # 检查容器是否存在 prowlarr
@@ -193,4 +207,15 @@ if [ -z "$container" ]; then
   docker run -d --name=qbittorrent --restart=always -e PUID=$uid -e PGID=$gid -p 8080:8080 -p 23456:23456 -p 23456:23456/udp -v /data/videos/tools/qbittorrent:/config -v /data/videos/media/downloads:/downloads linuxserver/qbittorrent
 else
   echo "qbittorrent 容器已存在 不用创建"
+fi
+
+# 检查容器是否存在 qiandao
+container=$(docker ps -q -f name="qiandao")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 qiandao ..."
+  docker pull a76yyyy/qiandao
+  mkdir -p -m 777 /data/videos/tools/qiandao
+  docker run -d --name=qiandao --restart=always -p 8923:80 -v /data/videos/tools/qiandao:/usr/src/app/config a76yyyy/qiandao
+else
+  echo "qiandao 容器已存在 不用创建"
 fi
