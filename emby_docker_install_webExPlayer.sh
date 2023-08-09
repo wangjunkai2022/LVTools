@@ -3,7 +3,7 @@
 if [ -f /system/dashboard-ui/embyWebAddExternalUrl/embyLaunchPotplayer.js ]; then
   echo "此emby server 已经安装了web外部播放"
 else
-  echo "此emby server 没有安装web外部播放"
+  echo "安装web外部播放中。。。"
   wget https://github.com/bpking1/embyExternalUrl/archive/refs/tags/v0.0.6.zip
   unzip v0.0.6.zip
   cp -r embyExternalUrl-0.0.6/embyWebAddExternalUrl/ /system/dashboard-ui/
@@ -11,4 +11,5 @@ else
   rm v0.0.6.zip
   rm -rf embyExternalUrl-0.0.6
 fi
+echo "删除文件$0"
 rm $0
