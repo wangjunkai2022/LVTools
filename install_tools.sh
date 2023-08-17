@@ -235,9 +235,9 @@ container=$(docker ps -q -f name="nginx")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 nginx ..."
   docker pull nginx
-  mkdir -p -m 777 /data/videos/tools/nginx
-  cp $(dirname $0)/nginx/conf.d/*.conf /data/videos/tools/nginx
-  docker run -d --name=nginx --restart=always -p 8880:80 -v /data/videos/tools/nginx:/etc/nginx/conf.d nginx
+  mkdir -p -m 777 /data/videos/tools/nginx/www/html
+  cp -r $(dirname $0)/nginx/conf.d/ /data/videos/tools/nginx
+  docker run -d --name=nginx --restart=always -p 8880:80 -v /data/videos/tools/nginx/conf.d:/etc/nginx/conf.d -v /data/videos/tools/nginx/www:/usr/share/www nginx
 else
   echo "nginx 容器已存在 不用创建"
 fi
