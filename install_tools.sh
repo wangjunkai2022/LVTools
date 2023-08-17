@@ -241,3 +241,15 @@ if [ -z "$container" ]; then
 else
   echo "nginx 容器已存在 不用创建"
 fi
+
+
+# 检查容器是否存在 glances 系统监控
+container=$(docker ps -q -f name="glances")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 glances ..."
+  docker pull nicolargo/glances
+  docker run -d --name=glances --restart="always" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host nicolargo/glances
+else
+  echo "glances 容器已存在 不用创建"
+fi
+
