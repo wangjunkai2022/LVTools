@@ -106,8 +106,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 embyserver ..."
   #docker pull emby/embyserver:latest
   #docker pull linuxserver/emby:latest
-  #  docker pull zishuo/embyserver
-  docker pull xinjiawei1/emby_unlockd
+  docker pull xinjiawei1/emby_unlockd # 解锁版
 
   mkdir -p -m 777 /data/videos/tools/embyserver
   docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xinjiawei1/emby_unlockd
@@ -219,4 +218,26 @@ if [ -z "$container" ]; then
   docker run -d --name=qiandao --restart=always -p 8923:80 -v /data/videos/tools/qiandao:/usr/src/app/config a76yyyy/qiandao
 else
   echo "qiandao 容器已存在 不用创建"
+fi
+
+# 检查容器是否存在 flaresolverr 配合一些pt签到使用
+container=$(docker ps -q -f name="flaresolverr")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 flaresolverr ..."
+  docker pull flaresolverr/flaresolverr
+  docker run -d --name=flaresolverr --restart=always -p 8191:8191 -e LOG_LEVEL=info flaresolverr/flaresolverr
+else
+  echo "flaresolverr 容器已存在 不用创建"
+fi
+
+# 检查容器是否存在 nginx
+container=$(docker ps -q -f name="nginx")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 nginx ..."
+  docker pull nginx
+  mkdir -p -m 777 /data/videos/tools/nginx
+  cp $(dirname $0)/nginx/conf.d/*.conf /data/videos/tools/nginx
+  docker run -d --name=nginx --restart=always -p 8880:80 -v /data/videos/tools/nginx:/etc/nginx/conf.d nginx
+else
+  echo "nginx 容器已存在 不用创建"
 fi
