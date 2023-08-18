@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>友友的第一个网页</title>
+</head>
+<body>
+<h1>IPv6 Address:</h1>
+<p id="ipv6"></p>
+
+<script>
+    function getIPv6Address() {
+        var ip = "";
+        var RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+        var pc = new RTCPeerConnection({iceServers: []});
+        pc.createDataChannel('');
+        pc.onicecandidate = function (e) {
+            if (e.candidate) {
+                var ipv6Regex = /([0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){7})/g;
+                var match = e.candidate.candidate.match(ipv6Regex);
+                if (match) {
+                    ip = match[0];
+                    document.getElementById("ipv6").innerHTML = ip;
+                }
+            }
+        };
+        pc.createOffer(function (sdp) {
+            pc.setLocalDescription(sdp);
+        }, function (error) {
+            console.log(error);
+        });
+    }
+
+    getIPv6Address();
+</script>
+</body>
+</html>
