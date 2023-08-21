@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="UTF-8">
-        <title>IPV6</title>
-    </head>
-    <body>
-        <p>用于拥有ipv6的设备访问</p>
-        <a href="http://test-ipv6.com/" target="_blank">点击进入ipv6测试界面</a>
-        <br>
-        <a href="http://[--ipv6--]:8096" target="_blank">点击进入ipv6地址播放界面</a>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>IPV6</title>
+</head>
+<body>
+<p>用于拥有ipv6的设备访问</p>
+<a href="http://test-ipv6.com/" target="_blank">点击进入ipv6测试界面</a>
+<br>
+<a href="http://[--ipv6--]:8096" target="_blank">点击进入ipv6地址播放界面</a>
+<button id="copyButton" onclick="copyText()">复制地址到剪切板</button>
+<script>
+    function copyText() {
+        // 获取要复制的文本
+        var textToCopy = "http://[--ipv6--]:8096";
+
+        // 创建一个临时的textarea元素，并将要复制的文本设置为其值
+        var tempTextArea = document.createElement("textarea");
+        tempTextArea.value = textToCopy;
+
+        // 将临时的textarea元素添加到页面中
+        document.body.appendChild(tempTextArea);
+
+        // 选择临时的textarea元素中的文本
+        tempTextArea.select();
+
+        // 执行复制操作
+        document.execCommand("copy");
+
+        // 删除临时的textarea元素
+        document.body.removeChild(tempTextArea);
+
+        // 提示用户复制成功
+        alert(textToCopy + " 已复制到剪贴板");
+    }
+</script>
+</body>
 </html>

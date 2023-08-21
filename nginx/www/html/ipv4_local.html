@@ -5,8 +5,34 @@
     <title>局域网访问</title>
 </head>
 <body>
-    <p>用于连接了我家wifi设备访问</p>
-    <br>
-    <a href="http://192.168.50.2:8096" target="_blank">点击进入wifi地址播放界面</a>
+<p>用于连接了我家wifi设备访问</p>
+<br>
+<a href="http://192.168.50.2:8096" target="_blank">点击进入wifi地址WEB播放界面</a>
+<button id="copyButton" onclick="copyText()">复制地址到剪切板</button>
+<script>
+    function copyText() {
+        // 获取要复制的文本
+        var textToCopy = "http://192.168.50.2:8096";
+
+        // 创建一个临时的textarea元素，并将要复制的文本设置为其值
+        var tempTextArea = document.createElement("textarea");
+        tempTextArea.value = textToCopy;
+
+        // 将临时的textarea元素添加到页面中
+        document.body.appendChild(tempTextArea);
+
+        // 选择临时的textarea元素中的文本
+        tempTextArea.select();
+
+        // 执行复制操作
+        document.execCommand("copy");
+
+        // 删除临时的textarea元素
+        document.body.removeChild(tempTextArea);
+
+        // 提示用户复制成功
+        alert(textToCopy + " 已复制到剪贴板");
+    }
+</script>
 </body>
 </html>
