@@ -235,14 +235,12 @@ container=$(docker ps -q -f name="nginx")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 nginx ..."
   docker pull nginx
-  mkdir -p -m 777 /data/videos/tools/nginx/www/html
-  cp -r $(dirname $0)/nginx/conf.d/ /data/videos/tools/nginx
-  cp -r $(dirname $0)/nginx/www /data/videos/tools/nginx
-  docker run -d --name=nginx --restart=always -p 8880:80 -v /data/videos/tools/nginx/conf.d:/etc/nginx/conf.d -v /data/videos/tools/nginx/www:/usr/share/www nginx
+  mkdir -p -m 777 /data/videos/tools/
+  cp -r $(dirname $0)/nginx /data/videos/tools
+  docker run -d --name=nginx --restart=always -p 8880:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx nginx
 else
   echo "nginx 容器已存在 不用创建"
 fi
-
 
 # 检查容器是否存在 glances 系统监控
 container=$(docker ps -q -f name="glances")
@@ -253,4 +251,3 @@ if [ -z "$container" ]; then
 else
   echo "glances 容器已存在 不用创建"
 fi
-

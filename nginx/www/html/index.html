@@ -1,37 +1,37 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>友友的第一个网页</title>
+    <title>当前服务器的IPv6地址</title>
 </head>
 <body>
-<h1>IPv6 Address:</h1>
+<h1>当前服务器的IPv6地址：</h1>
 <p id="ipv6"></p>
 
 <script>
-    function getIPv6Address() {
-        var ip = "";
-        var RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+    // 使用JavaScript获取并显示IPv6地址
+    var ipv6 = "未知";
+    if (window.RTCPeerConnection) {
         var pc = new RTCPeerConnection({iceServers: []});
         pc.createDataChannel('');
-        pc.onicecandidate = function (e) {
-            if (e.candidate) {
-                var ipv6Regex = /([0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){7})/g;
-                var match = e.candidate.candidate.match(ipv6Regex);
+        pc.createOffer(function (sdp) {
+            pc.setLocalDescription(sdp, function () {
+            }, function () {
+            });
+        }, function () {
+        });
+        pc.onicecandidate = function (event) {
+            if (event.candidate && event.candidate.candidate) {
+                var match = event.candidate.candidate.match(/([0-9a-fA-F:]+)/);
                 if (match) {
-                    ip = match[0];
-                    document.getElementById("ipv6").innerHTML = ip;
+                    ipv6 = match[1];
+                    document.getElementById("ipv6").innerHTML = ipv6;
                 }
             }
         };
-        pc.createOffer(function (sdp) {
-            pc.setLocalDescription(sdp);
-        }, function (error) {
-            console.log(error);
-        });
     }
 
-    getIPv6Address();
+    // 将IPv6地址显示在网页上
+    document.getElementById("ipv6").innerHTML = ipv6;
 </script>
 </body>
 </html>
