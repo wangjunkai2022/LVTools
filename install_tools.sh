@@ -204,7 +204,7 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qbittorrent ..."
   docker pull linuxserver/qbittorrent
   mkdir -p -m 777 /data/videos/tools/qbittorrent
-  docker run -d --name=qbittorrent --restart=always -e PUID=$uid -e PGID=$gid -p 8080:8080 -p 23456:23456 -p 23456:23456/udp -v /data/videos/tools/qbittorrent:/config -v /data/videos/media/downloads:/downloads linuxserver/qbittorrent
+  docker run -d --name=qbittorrent --restart=always -e PUID=$uid -e PGID=$gid -p 8081:8080 -p 23456:23456 -p 23456:23456/udp -v /data/videos/tools/qbittorrent:/config -v /data/videos/media/downloads:/downloads linuxserver/qbittorrent
 else
   echo "qbittorrent 容器已存在 不用创建"
 fi
@@ -237,7 +237,7 @@ if [ -z "$container" ]; then
   docker pull nginx
   mkdir -p -m 777 /data/videos/tools/
   cp -r $(dirname $0)/nginx /data/videos/tools
-  docker run -d --name=nginx --restart=always -p 8880:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx nginx
+  docker run -d --name=nginx --restart=always -p 8880:8880 -p 8080:8080 -p 80:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx nginx
 else
   echo "nginx 容器已存在 不用创建"
 fi
