@@ -25,5 +25,7 @@ if [ "$answer" == "y" ]; then
     sudo crontab -l >conf && echo "*/1 * * * * yy_auto_ping.sh" >>conf && sudo crontab conf && sudo rm -f conf
   fi
 
-#  sudo rm -rf ./install_ping.sh
+  #  sudo rm -rf ./install_ping.sh
+  echo "ok已经添加定时执行检测路由器是否在线"
+
 fi

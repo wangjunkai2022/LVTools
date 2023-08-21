@@ -19,5 +19,6 @@ if [ "$answer" == "y" ]; then
     sudo chmod 777 /bin/ipv6_check.sh
     sudo crontab -l >conf && echo "*/1 * * * * ipv6_check.sh" >>conf && sudo crontab conf && sudo rm -f conf
   fi
-  
+
+  echo "ok已经添加定时执行检测ipv6"
 fi
