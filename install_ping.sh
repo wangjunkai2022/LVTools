@@ -13,8 +13,17 @@ if [ "$answer" == "y" ]; then
 
   sed "s/0.0.0.0/$input_ip/g" -i ./auto_ping.sh
 
-  sudo mv ./auto_ping.sh /bin/yy_auto_ping.sh
-  sudo chmod 777 /bin/yy_auto_ping.sh
-  sudo crontab -l >conf && echo "*/1 * * * * yy_auto_ping.sh" >>conf && sudo crontab conf && sudo rm -f conf
+  if [ $EUID -eq 0 ]; then
+    echo "当前用户是root用户"
+    cp ./auto_ping.sh /bin/yy_auto_ping.sh
+    chmod 777 /bin/yy_auto_ping.sh
+    crontab -l >conf && echo "*/1 * * * * yy_auto_ping.sh" >>conf && crontab conf && rm -f conf
+  else
+    echo "当前用户不是root用户"
+    sudo cp ./auto_ping.sh /bin/yy_auto_ping.sh
+    sudo chmod 777 /bin/yy_auto_ping.sh
+    sudo crontab -l >conf && echo "*/1 * * * * yy_auto_ping.sh" >>conf && sudo crontab conf && sudo rm -f conf
+  fi
+
 #  sudo rm -rf ./install_ping.sh
 fi
