@@ -225,7 +225,7 @@ container=$(docker ps -q -f name="flaresolverr")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 flaresolverr ..."
   docker pull flaresolverr/flaresolverr
-  docker run -d --name=flaresolverr --restart=always -p 8191:8191 -e LOG_LEVEL=info flaresolverr/flaresolverr
+  docker run -d --name=flaresolverr --restart=always -p 8191:8191 -e LOG_LEVEL=info -e TZ="Asia/Shanghai" flaresolverr/flaresolverr
 else
   echo "flaresolverr 容器已存在 不用创建"
 fi
