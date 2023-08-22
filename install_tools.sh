@@ -220,7 +220,7 @@ else
   echo "qiandao 容器已存在 不用创建"
 fi
 
-# 检查容器是否存在 flaresolverr 配合一些pt签到使用
+# 检查容器是否存在 flaresolverr 配合一些pt签到使用（代理验证cf）
 container=$(docker ps -q -f name="flaresolverr")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 flaresolverr ..."
