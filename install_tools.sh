@@ -237,7 +237,7 @@ if [ -z "$container" ]; then
   docker pull nginx
   mkdir -p -m 777 /data/videos/tools/
   cp -r $(dirname $0)/nginx /data/videos/tools
-  docker run -d --name=nginx --restart=always -p 8880:8880 -p 8080:8080 -p 80:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx -v /data/videos/media:/media nginx
+  docker run -d --name=nginx -e PUID=$uid --restart=always -p 8880:8880 -p 8080:8080 -p 80:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx -v /data/videos/media:/media nginx
 else
   echo "nginx 容器已存在 不用创建"
 fi
