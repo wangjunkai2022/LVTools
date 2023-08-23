@@ -253,12 +253,12 @@ else
 fi
 
 
-# 检查容器是否存在 webdav 系统监控
-container=$(docker ps -q -f name="webdav")
-if [ -z "$container" ]; then
-  echo "容器不存在，正在创建容器 webdav ..."
-  docker pull ionelmc/webdav
-  docker run -d --name=webdav --restart="always" -p 8082:8080 -v /data/videos/media:/media --env WEBDAV_USERNAME=youyou --env WEBDAV_PASSWORD="''''" ionelmc/webdav
-else
-  echo "webdav 容器已存在 不用创建"
-fi
+# 检查容器是否存在 webdav
+#container=$(docker ps -q -f name="webdav")
+#if [ -z "$container" ]; then
+#  echo "容器不存在，正在创建容器 webdav ..."
+#  docker pull ionelmc/webdav
+#  docker run -d --name=webdav --restart="always" -p 8082:8080 -v /data/videos/media:/media --env WEBDAV_USERNAME=youyou --env WEBDAV_PASSWORD="''''" ionelmc/webdav
+#else
+#  echo "webdav 容器已存在 不用创建"
+#fi
