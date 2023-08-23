@@ -237,7 +237,7 @@ if [ -z "$container" ]; then
   docker pull nginx
   mkdir -p -m 777 /data/videos/tools/
   cp -r $(dirname $0)/nginx /data/videos/tools
-  docker run -d --name=nginx --restart=always -p 8880:8880 -p 8080:8080 -p 80:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx nginx
+  docker run -d --name=nginx --restart=always -p 8880:8880 -p 8080:8080 -p 80:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx -v /data/videos/media:/media nginx
 else
   echo "nginx 容器已存在 不用创建"
 fi
@@ -250,4 +250,15 @@ if [ -z "$container" ]; then
   docker run -d --name=glances --restart="always" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host nicolargo/glances
 else
   echo "glances 容器已存在 不用创建"
+fi
+
+
+# 检查容器是否存在 webdav 系统监控
+container=$(docker ps -q -f name="webdav")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 webdav ..."
+  docker pull ionelmc/webdav
+  docker run -d --name=webdav --restart="always" -p 8082:8080 -v /data/videos/media:/media --env WEBDAV_USERNAME=youyou --env WEBDAV_PASSWORD="''''" ionelmc/webdav
+else
+  echo "webdav 容器已存在 不用创建"
 fi
