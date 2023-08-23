@@ -234,10 +234,10 @@ fi
 container=$(docker ps -q -f name="nginx")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 nginx ..."
-  docker pull nginx
+  docker pull xiaokai2022/nginx_webext
   mkdir -p -m 777 /data/videos/tools/
   cp -r $(dirname $0)/nginx /data/videos/tools
-  docker run -d --name=nginx -e PUID=$uid --restart=always -p 8880:8880 -p 8080:8080 -p 80:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx -v /data/videos/media:/media nginx
+  docker run -d --name=nginx -e PUID=$uid --restart=always -p 8880:8880 -p 8080:8080 -p 80:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx -v /data/videos/media:/media xiaokai2022/nginx_webext
 else
   echo "nginx 容器已存在 不用创建"
 fi
@@ -253,12 +253,12 @@ else
 fi
 
 
-# 检查容器是否存在 webdav
-container=$(docker ps -q -f name="webdav")
-if [ -z "$container" ]; then
-  echo "容器不存在，正在创建容器 webdav ..."
-  docker pull ionelmc/webdav
-  docker run -d --name=webdav --restart="always" -p 8082:8080 -v /data/videos/media:/media --env WEBDAV_USERNAME=youyou --env WEBDAV_PASSWORD="''''" ionelmc/webdav
-else
-  echo "webdav 容器已存在 不用创建"
-fi
+## 检查容器是否存在 webdav
+#container=$(docker ps -q -f name="webdav")
+#if [ -z "$container" ]; then
+#  echo "容器不存在，正在创建容器 webdav ..."
+#  docker pull ionelmc/webdav
+#  docker run -d --name=webdav --restart="always" -p 8082:8080 -v /data/videos/media:/media --env WEBDAV_USERNAME=youyou --env WEBDAV_PASSWORD="''''" ionelmc/webdav
+#else
+#  echo "webdav 容器已存在 不用创建"
+#fi
