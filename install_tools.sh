@@ -104,13 +104,13 @@ fi
 container=$(docker ps -q -f name="embyserver")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 embyserver ..."
-  #docker pull emby/embyserver:latest
-  #docker pull linuxserver/emby:latest
-  docker pull xinjiawei1/emby_unlockd # 解锁版
-
+  #  docker pull emby/embyserver:latest
+  #  docker pull linuxserver/emby:latest
+  #  docker pull xinjiawei1/emby_unlockd # 解锁版
+  docker pull xiaokai2022/embyserver:latest
   mkdir -p -m 777 /data/videos/tools/embyserver
-  docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xinjiawei1/emby_unlockd
-
+  docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xiaokai2022/embyserver
+  cp -r $(dirname $0)/docker_embyserver_build/plugins /data/videos/tools/embyserver
 else
   echo "embyserver 容器已存在 不用创建"
 fi
@@ -251,14 +251,3 @@ if [ -z "$container" ]; then
 else
   echo "glances 容器已存在 不用创建"
 fi
-
-
-## 检查容器是否存在 webdav
-#container=$(docker ps -q -f name="webdav")
-#if [ -z "$container" ]; then
-#  echo "容器不存在，正在创建容器 webdav ..."
-#  docker pull ionelmc/webdav
-#  docker run -d --name=webdav --restart="always" -p 8082:8080 -v /data/videos/media:/media --env WEBDAV_USERNAME=youyou --env WEBDAV_PASSWORD="''''" ionelmc/webdav
-#else
-#  echo "webdav 容器已存在 不用创建"
-#fi
