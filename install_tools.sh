@@ -247,7 +247,19 @@ container=$(docker ps -q -f name="glances")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 glances ..."
   docker pull nicolargo/glances
-  docker run -d --name=glances --restart="always" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host nicolargo/glances
+  docker run -d --name=glances --restart="always" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro nicolargo/glances
 else
   echo "glances 容器已存在 不用创建"
+fi
+
+# 检查容器是否存在 resilio-sync 系统监控
+container=$(docker ps -q -f name="resilio-sync")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 resilio-sync ..."
+  docker pull linuxserver/resilio-sync
+  mkdir -p -m 777 /data/videos/tools/resilio-sync
+  docker run -d --name=resilio-sync -e PUID=$uid -e PGID=$gid -e TZ=Asia/Chongqing -p 8888:8888 -p 55555:55555 -v /data/videos/tools/resilio-sync/config:/config -v /data/videos/tools/resilio-sync/downloads:/downloads -v /data/videos/media/sync:/sync --restart always linuxserver/resilio-sync
+  cp $(dirname $0)/ResilioSyncPro.btskey /data/videos/tools/resilio-sync/config/
+else
+  echo "resilio-sync 容器已存在 不用创建"
 fi
