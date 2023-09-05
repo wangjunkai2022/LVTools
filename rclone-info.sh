@@ -1,5 +1,9 @@
 #!/bin/bash
-docker volume create rclonevolume -d rclone -o type=sftp -o sftp-host=_hostname_ -o sftp-user=_username_ -o sftp-pass=_password_ -o allow-other=true
+
+docker pull rclone/rclone
+#下面这句话不知道有什么用现在
+#docker volume create rclonevolume -d rclone -o type=sftp -o sftp-host=_hostname_ -o sftp-user=_username_ -o sftp-pass=_password_ -o allow-other=true
+
 #运行前需要先 创建一个 名字为 alist_webdav 的webdav 服务
 #创建rclone的配置文件
 docker run -it --rm --name rclone_temp -v /data/videos/tools/rclone/config:/config/rclone rclone/rclone config
