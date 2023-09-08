@@ -24,8 +24,6 @@ class changefc2:
     def __init__(self, folder_path="./"):
         print("开始扫描这个文件夹：", folder_path)
         files = self.get_files_in_folder(folder_path)
-        print(files)
-        return
         for file in files:
             # 分里文件夹和文件
             file_path, file_name = os.path.split(file)
