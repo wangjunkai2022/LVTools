@@ -3,7 +3,7 @@
 function echo_green() {
   echo -e "\033[32m$1\033[0m"
 }
-echo_green "是否执行安装自动检测硬盘温度 如果超过预设值则关机"
+echo_green "是否执行安装自动检测硬盘温度 如果超过预设值则关机 y/n"
 read answer
 if [ "$answer" == "y" ]; then
   cd $(dirname $0)
