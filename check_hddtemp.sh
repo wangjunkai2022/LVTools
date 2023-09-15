@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hdds=("/dev/sdb","/dev/sdc")
+hdds=(/dev/sdb,/dev/sdc)
 
 function check() {
   # 检测硬盘温度
@@ -13,7 +13,7 @@ function check() {
   if [ $temp -gt 50 ]; then
     echo "$1 当前硬盘温度是 $temp 大于设置的温度50 现在执行关机."
     #    shutdown -h now
-#    poweroff
+    #    poweroff
 
   else
     echo "$1 当前硬盘温度是 $temp"
