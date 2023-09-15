@@ -8,9 +8,14 @@ function check() {
   temp=$(hddtemp $1)
   echo
   echo "$temp"
-  # 货物温度值
-  temp=${temp:31:2}
+
+  # 匹配温度值
+  temp_regex='[+-]?[0-9]+([.][0-9]+)?°?[CF]'
+  temp=$(echo "$temp" | grep -oE "$temp_regex")
+
+  # 温度值
   echo "$temp"
+  
   ## 值是否大于50度
   if [ $temp -gt 50 ]; then
     echo "$1 当前硬盘温度是 $temp 大于设置的温度50 现在执行关机."
