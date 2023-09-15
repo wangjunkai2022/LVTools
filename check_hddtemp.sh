@@ -4,7 +4,7 @@
 temp=$(hddtemp /dev/sdc)
 
 # 货物温度值
-temp=${temp:23:2}
+temp=${temp:29:2}
 echo "$temp"
 ## 值是否大于50度
 #if [ $temp -gt 50 ]; then
