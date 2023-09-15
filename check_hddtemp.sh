@@ -1,17 +1,13 @@
 #!/bin/bash
 
-hdds=(/dev/sdb,/dev/sdc)
+hdds=(/dev/sdb /dev/sdc)
 
 function check() {
   # 检测硬盘温度
-  echo "check"
-  echo
   echo "$1"
-
   temp=$(hddtemp $1)
   echo
   echo "$temp"
-
   # 货物温度值
   temp=${temp:31:2}
   echo "$temp"
@@ -30,5 +26,5 @@ function check() {
 # 遍历数组中的元素和下标
 for i in "${!hdds[@]}"; do
   # 在此处执行操作，使用 $i 和 ${array[$i]} 处理每个元素和下标
-  check $i
+  check ${hdds[$i]}
 done
