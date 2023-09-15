@@ -1,16 +1,17 @@
 #!/bin/bash
 
 #需要扫描的地址
-path=/data/videos/media/alist/PikPak/无码
+path=/data/videos/media/alist/PikPak2/sehuatang/亚洲无码原创
 filepath=$(
   cd "$(dirname "$0")"
   pwd
 )
-python3 $filepath/change_name_fc2.py "$path"
 
 find $path -name "社 區 最 新 情 報*" -print0 | xargs -0 rm -rf ##可以删除带空格
 #find $path -name "x u u 6 2 . c o m*" | xargs rm -rf
 find $path -name "x u u 6 2 . c o m*" -print0 | xargs -0 rm -rf ##可以删除带空格
+
+python3 $filepath/change_name_fc2.py "$path"
 
 #docker pull ghcr.io/vergilgao/mdc:latest
 docker pull xiaokai2022/mdc

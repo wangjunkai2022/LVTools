@@ -1,13 +1,23 @@
 #!/usr/bin/python3
 
+# 使用方法 :
+# python3 change_name_fc2.py 需要更改的文件夹
+
 # 修改文件文件夹下名 fc2ppv-7687686-1.mp4 为 fc2-7687686-cd1.mp4
 # 修改文件文件夹下名 fc2ppv-7687686.mp4 为 fc2-7687686.mp4
+# 修改文件文件夹下名 名字带有-U结尾 如：ABP-320-U.mp4 为 ABP-320.mp4
+# 修改文件文件夹下名 名字带有-HD结尾 如：H0930-ki230902-HD.mp4 为 H0930-ki230902.mp4
+# 修改文件文件夹下名 名字带有-SD结尾 如：H0930-ki230905-SD.mp4 为 H0930-ki230905.mp4
+# 修改文件文件夹下名 名字带有-fhd结尾 如：H4610-ori1833-FHD.mp4 为 H4610-ori1833.mp4
+# 修改文件文件夹下名
+# 修改文件文件夹下名
+# 修改文件文件夹下名
 import re
 import os
 import sys
 
 # 需要排除的文件夹
-exclude = ["JAV_failed", 'JAV_output']
+exclude = ["JAV_failed", 'JAV_output', '无码破解']
 
 
 class changefc2:
