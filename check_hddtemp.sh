@@ -4,7 +4,13 @@ hdds=(/dev/sdb,/dev/sdc)
 
 function check() {
   # 检测硬盘温度
+  echo "check"
+  echo
+  echo "$1"
+
   temp=$(hddtemp $1)
+  echo
+  echo "$temp"
 
   # 货物温度值
   temp=${temp:31:2}
