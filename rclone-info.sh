@@ -7,6 +7,13 @@ docker pull rclone/rclone
 #运行前需要先 创建一个 名字为 alist_webdav 的webdav 服务
 #创建rclone的配置文件
 docker run -it --rm --name rclone_temp -v /data/videos/tools/rclone/config:/config/rclone rclone/rclone config
+
+# alist_webdav
+# url :http://ip:5244:/dav
+# admin
+# 密码
+
+
 #查看是否生成了 alist_webdav 的配置
 docker run -it --rm --name rclone_temp -v /data/videos/tools/rclone/config:/config/rclone rclone/rclone listremotes
 #把 alist_webdav 挂载到硬盘 /data/videos/media/alist 中
