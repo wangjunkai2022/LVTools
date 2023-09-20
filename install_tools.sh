@@ -108,9 +108,9 @@ if [ -z "$container" ]; then
   #  docker pull linuxserver/emby:latest
   #  docker pull xinjiawei1/emby_unlockd # 解锁版
   docker pull xiaokai2022/embyserver:latest
-  mkdir -p -m 777 /data/videos/tools/embyserver
+  #  mkdir -p -m 777 /data/videos/tools/embyserver
   docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xiaokai2022/embyserver
-  cp -r $(dirname $0)/docker_embyserver_build/plugins /data/videos/tools/embyserver
+#  docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xinjiawei1/emby_unlockd
 else
   echo "embyserver 容器已存在 不用创建"
 fi
