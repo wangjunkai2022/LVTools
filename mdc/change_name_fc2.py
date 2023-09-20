@@ -9,7 +9,7 @@
 # 修改文件文件夹下名 名字带有-HD结尾 如：H0930-ki230902-HD.mp4 为 H0930-ki230902.mp4
 # 修改文件文件夹下名 名字带有-SD结尾 如：H0930-ki230905-SD.mp4 为 H0930-ki230905.mp4
 # 修改文件文件夹下名 名字带有-fhd结尾 如：H4610-ori1833-FHD.mp4 为 H4610-ori1833.mp4
-# 修改文件文件夹下名
+# 修改文件文件夹下名 名字带有-uc结尾 如：H4610-ori1833-UC.mp4 为 H4610-ori1833.mp4
 # 修改文件文件夹下名
 # 修改文件文件夹下名
 import re
@@ -18,6 +18,16 @@ import sys
 
 # 需要排除的文件夹
 exclude = ["JAV_failed", 'JAV_output', '无码破解']
+video_exclude = ['mp4', 'mkv', 'avi', 'mov', 'wmv', 'flv']
+replace_endswith = {
+    # 'fc2ppv':"fc2", # 需要正则匹配这里不添加
+    # '-u': '',
+    # '-hd': '',
+    # '-sd': '',
+    # '-fhd': '',
+    # '-uc': '',
+    # '-uc-c': '-c',
+}
 
 
 class changefc2:
@@ -27,8 +37,11 @@ class changefc2:
         files = []
         for fpathe, dirs, fs in os.walk(folder_path):
             dirs[:] = [d for d in dirs if d not in exclude]
+            # dirs[:] = [(d for d in dirs if d not in exclude) and (fs.endswith(end) for end in video_exclude)]
             for f in fs:
-                files.append(os.path.join(fpathe, f))
+                for end in video_exclude:
+                    if f.endswith(end):
+                        files.append(os.path.join(fpathe, f))
         return files
 
     def __init__(self, folder_path="./"):
@@ -36,46 +49,31 @@ class changefc2:
         files = self.get_files_in_folder(folder_path)
         for file in files:
             # 分里文件夹和文件
-            file_path, file_name = os.path.split(file)
-            lower_check = file_name.lower()
-            # fc2
-            fc2cd = re.search(r'fc2ppv-(\d)+', lower_check, re.IGNORECASE)
-            if fc2cd:
-                lower_check = lower_check.replace("fc2ppv", "fc2")
-                num_re = re.search(r'-\d\.', lower_check)
+            file_path, file_name_all = os.path.split(file)
+            file_name = os.path.splitext(file_name_all)[0]
+            file_name_extension = os.path.splitext(file_name_all)[1]
+            file_name = file_name.lower()
+            isChange = False
+            if re.search(r'fc2ppv-(\d)+', file_name, re.IGNORECASE):
+                file_name = file_name.replace("fc2ppv", "fc2")
+                num_re = re.search(r'-\d', file_name)
                 if num_re:
                     num = num_re.group()
-                    lower_check = re.sub(r'-\d\.', "-cd" + num[1:len(num) - 1] + ".", lower_check)
-                print("修改文件{}为{}".format(file, os.path.join(file_path, lower_check)))
-                os.rename(file, os.path.join(file_path, lower_check))
-
-            # 名字带有-U结尾 如：ABP-320-U.mp4
-            _u = re.search(r'-u.', lower_check, re.IGNORECASE)
-            if _u:
-                lower_check = lower_check.replace("-u.", ".")
-                print("修改文件{}为{}".format(file, os.path.join(file_path, lower_check)))
-                os.rename(file, os.path.join(file_path, lower_check))
-            # 名字带有-HD结尾 如：H0930-ki230902-HD.mp4
-            _hd = re.search(r'-hd.', lower_check, re.IGNORECASE)
-            if _hd:
-                lower_check = lower_check.replace("-hd.", ".")
-                print("修改文件{}为{}".format(file, os.path.join(file_path, lower_check)))
-                os.rename(file, os.path.join(file_path, lower_check))
-
-            # 名字带有-SD结尾 如：H0930-ki230905-SD.mp4
-            _sd = re.search(r'-sd.', lower_check, re.IGNORECASE)
-            if _sd:
-                lower_check = lower_check.replace("-sd.", ".")
-                print("修改文件{}为{}".format(file, os.path.join(file_path, lower_check)))
-                os.rename(file, os.path.join(file_path, lower_check))
-
-            # 名字带有-fhd结尾 如：H4610-ori1833-FHD.mp4
-            _fhd = re.search(r'-fhd.', lower_check, re.IGNORECASE)
-            if _fhd:
-                lower_check = lower_check.replace("-fhd.", ".")
-                print("修改文件{}为{}".format(file, os.path.join(file_path, lower_check)))
-                os.rename(file, os.path.join(file_path, lower_check))
+                    file_name = re.sub(r'-\d', "-cd" + num[1:len(num) - 1], file_name)
+                isChange = True
+            else:
+                for key in replace_endswith.keys():
+                    if file_name.endswith(key):
+                        file_name = file_name.replace(key, replace_endswith.get(key))
+                        isChange = True
+                        break
+            if not isChange:
+                continue
+            file_name_all = file_name.upper() + file_name_extension
+            print("修改文件{}为{}".format(file, os.path.join(file_path, file_name_all)))
+            os.rename(file, os.path.join(file_path, file_name_all))
 
 
 if __name__ == '__main__':
-    changefc2(sys.argv[1])
+    changefc2(sys.argv[1] or None)
+    # changefc2('../')
