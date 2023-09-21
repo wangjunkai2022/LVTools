@@ -56,10 +56,10 @@ class changefc2:
             isChange = False
             if re.search(r'fc2ppv-(\d)+', file_name, re.IGNORECASE):
                 file_name = file_name.replace("fc2ppv", "fc2")
-                num_re = re.search(r'-\d', file_name)
+                num_re = re.search(r'-\d+-\d', file_name)
                 if num_re:
-                    num = num_re.group()
-                    file_name = re.sub(r'-\d', "-cd" + num[1:len(num) - 1], file_name)
+                    num = num_re.group()[-1]
+                    file_name = file_name[0:-1] + "cd" + num
                 isChange = True
             else:
                 for key in replace_endswith.keys():
@@ -76,4 +76,4 @@ class changefc2:
 
 if __name__ == '__main__':
     changefc2(sys.argv[1] or None)
-    # changefc2('../')
+    # changefc2(os.path.join(os.path.abspath(''), "../test"))
