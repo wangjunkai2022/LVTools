@@ -51,7 +51,12 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 prowlarr ..."
   docker pull linuxserver/prowlarr:latest
   mkdir -p -m 777 /data/videos/tools/prowlarr
-  docker run -d --name=prowlarr -e PUID=$uid -e PGID=$gid -p 9696:9696 -v /data/videos/tools/prowlarr:/config --restart always linuxserver/prowlarr
+  docker run -d --name=prowlarr \
+    -e PUID=$uid -e PGID=$gid \
+    -p 9696:9696 \
+    -v /data/videos/tools/prowlarr:/config \
+    --restart always \
+    linuxserver/prowlarr
 else
   echo "prowlarr 容器已存在 不用创建"
 fi
@@ -61,7 +66,12 @@ container=$(docker ps -q -f name="portainer")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 portainer ..."
   docker pull portainer/portainer-ce
-  docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce
+  docker run -d \
+    -p 9000:9000 \
+    --name=portainer \
+    --restart=always \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    portainer/portainer-ce
 else
   echo "portainer 容器已存在 不用创建"
 fi
@@ -72,7 +82,14 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 sonarr ..."
   docker pull linuxserver/sonarr:latest
   mkdir -p -m 777 /data/videos/tools/sonarr
-  docker run -d --name=sonarr -e PUID=$uid -e PGID=$gid -p 8989:8989 -v /data/videos/tools/sonarr:/config -v /data/videos/media:/media --restart always linuxserver/sonarr
+  docker run -d \
+    --name=sonarr \
+    -e PUID=$uid -e PGID=$gid \
+    -p 8989:8989 \
+    -v /data/videos/tools/sonarr:/config \
+    -v /data/videos/media:/media \
+    --restart always \
+    linuxserver/sonarr
 else
   echo "sonarr 容器已存在 不用创建"
 fi
@@ -83,7 +100,14 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 radarr ..."
   docker pull linuxserver/radarr:latest
   mkdir -p -m 777 /data/videos/tools/radarr
-  docker run -d --name=radarr -e PUID=$uid -e PGID=$gid -p 7878:7878 -v /data/videos/tools/radarr:/config -v /data/videos/media:/media --restart always linuxserver/radarr
+  docker run -d \
+    --name=radarr \
+    -e PUID=$uid -e PGID=$gid \
+    -p 7878:7878 \
+    -v /data/videos/tools/radarr:/config \
+    -v /data/videos/media:/media \
+    --restart always \
+    linuxserver/radarr
 else
   echo "radarr 容器已存在 不用创建"
 fi
@@ -94,7 +118,18 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 aria2-pro ..."
   docker pull p3terx/aria2-pro
   mkdir -p -m 777 /data/videos/tools/aria2
-  docker run -d --name aria2-pro -e PUID=$uid -e PGID=$gid --restart always --log-opt max-size=1m -e RPC_PORT=6800 -p 6800:6800 -p 6888:6888 -p 6888:6888/udp -v /data/videos/tools/aria2:/config -v /data/videos/media/downloads:/downloads p3terx/aria2-pro
+  docker run -d \
+    --name aria2-pro \
+    -e PUID=$uid -e PGID=$gid \
+    --restart always \
+    --log-opt max-size=1m \
+    -e RPC_PORT=6800 \
+    -p 6800:6800 \
+    -p 6888:6888 \
+    -p 6888:6888/udp \
+    -v /data/videos/tools/aria2:/config \
+    -v /data/videos/media/downloads:/downloads \
+    p3terx/aria2-pro
 
 else
   echo "aria2-pro 容器已存在 不用创建"
@@ -109,7 +144,19 @@ if [ -z "$container" ]; then
   #  docker pull xinjiawei1/emby_unlockd # 解锁版
   docker pull xiaokai2022/embyserver:latest
   #  mkdir -p -m 777 /data/videos/tools/embyserver
-  docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xiaokai2022/embyserver
+  docker run -d \
+    --name embyserver \
+    --env HTTP_PROXY="$proxy_ip" \
+    --env HTTPS_PROXY="$proxy_ip" \
+    --env NO_PROXY="127.0.0.1,localhost,192.168.*" \
+    -e PUID=$uid -e PGID=$gid \
+    --device /dev/dri:/dev/dri \
+    -v /data/videos/tools/embyserver:/config \
+    -v /data/videos/media:/media \
+    -p 8096:8096 \
+    -p 8920:8920 \
+    --restart always \
+    xiaokai2022/embyserver
 #  docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xinjiawei1/emby_unlockd
 else
   echo "embyserver 容器已存在 不用创建"
@@ -121,7 +168,18 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 ombi ..."
   docker pull linuxserver/ombi:latest
   mkdir -p -m 777 /data/videos/tools/ombi
-  docker run -d --name=ombi -e PUID=$uid -e PGID=$gid --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e BASE_URL=/ombi -p 3579:3579 -v /data/videos/tools/ombi:/config --restart always linuxserver/ombi
+  docker run -d \
+    --name=ombi \
+    -e PUID=$uid \
+    -e PGID=$gid \
+    --env HTTP_PROXY="$proxy_ip" \
+    --env HTTPS_PROXY="$proxy_ip" \
+    --env NO_PROXY="127.0.0.1,localhost,192.168.*" \
+    -e BASE_URL=/ombi \
+    -p 3579:3579 \
+    -v /data/videos/tools/ombi:/config \
+    --restart always \
+    linuxserver/ombi
 
 else
   echo "ombi 容器已存在 不用创建"
@@ -134,7 +192,19 @@ if [ -z "$container" ]; then
   docker pull allanpk716/chinesesubfinder:latest
   mkdir -p -m 777 /data/videos/tools/chinesesubfinder/config
   mkdir -p -m 777 /data/videos/tools/chinesesubfinder/browser
-  docker run -d --name chinesesubfinder -e PUID=$uid -e PGID=$gid -v /data/videos/tools/chinesesubfinder/config:/config -v /data/videos/media:/media -v /data/videos/tools/chinesesubfinder/browser:/root/.cache/rod/browser -p 19035:19035 -p 19037:19037 --log-driver "json-file" --log-opt "max-size=10m" --restart=always allanpk716/chinesesubfinder
+  docker run -d \
+    --name chinesesubfinder \
+    -e PUID=$uid \
+    -e PGID=$gid \
+    -v /data/videos/tools/chinesesubfinder/config:/config \
+    -v /data/videos/media:/media \
+    -v /data/videos/tools/chinesesubfinder/browser:/root/.cache/rod/browser \
+    -p 19035:19035 \
+    -p 19037:19037 \
+    --log-driver "json-file" \
+    --log-opt "max-size=10m" \
+    --restart=always \
+    allanpk716/chinesesubfinder
 
 else
   echo "chinesesubfinder 容器已存在 不用创建"
@@ -146,7 +216,15 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 bazarr ..."
   docker pull linuxserver/bazarr:latest
   mkdir -p -m 777 /data/videos/tools/bazarr
-  docker run -d --name=bazarr -e PUID=$uid -e PGID=$gid -p 6767:6767 -v /data/videos/tools/bazarr:/config -v /data/videos/media:/media --restart always linuxserver/bazarr
+  docker run -d \
+    --name=bazarr \
+    -e PUID=$uid \
+    -e PGID=$gid \
+    -p 6767:6767 \
+    -v /data/videos/tools/bazarr:/config \
+    -v /data/videos/media:/media \
+    --restart always \
+    linuxserver/bazarr
 
 else
   echo "bazarr 容器已存在 不用创建"
@@ -158,7 +236,14 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 alist ..."
   docker pull xhofe/alist
   mkdir -p -m 777 /data/videos/tools/alist
-  docker run -d --restart=always -e PUID=$uid -e PGID=$gid -v /data/videos/tools/alist:/opt/alist/data -p 5244:5244 --name="alist" xhofe/alist
+  docker run -d \
+    --restart=always \
+    -e PUID=$uid \
+    -e PGID=$gid \
+    -v /data/videos/tools/alist:/opt/alist/data \
+    -p 5244:5244 \
+    --name="alist" \
+    xhofe/alist
 
 else
   echo "alist 容器已存在 不用创建"
@@ -170,7 +255,14 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 jackett ..."
   docker pull linuxserver/jackett
   mkdir -p -m 777 /data/videos/tools/jackett
-  docker run -d --name=jackett --restart=always -e PUID=$uid -e PGID=$gid -v /data/videos/tools/jackett:/config -p 9117:9117 linuxserver/jackett
+  docker run -d \
+    --name=jackett \
+    --restart=always \
+    -e PUID=$uid \
+    -e PGID=$gid \
+    -v /data/videos/tools/jackett:/config \
+    -p 9117:9117 \
+    linuxserver/jackett
 
 else
   echo "jackett 容器已存在 不用创建"
@@ -182,7 +274,16 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 proxy_v2ray ..."
   docker pull v2fly/v2fly-core
   mkdir -p -m 777 /data/videos/tools/proxy_v2ray
-  docker run -d --name=proxy_v2ray --restart=always -e PUID=$uid -e PGID=$gid -v /data/videos/tools/proxy_v2ray:/config -p 10808:10808 -p 10809:10809 v2fly/v2fly-core run -c /config/config.json
+  docker run -d \
+    --name=proxy_v2ray \
+    --restart=always \
+    -e PUID=$uid \
+    -e PGID=$gid \
+    -v /data/videos/tools/proxy_v2ray:/config \
+    -p 10808:10808 \
+    -p 10809:10809 \
+    v2fly/v2fly-core \
+    run -c /config/config.json
 else
   echo "proxy_v2ray 容器已存在 不用创建"
 fi
@@ -193,7 +294,14 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 nat_v2ray ..."
   docker pull v2fly/v2fly-core
   mkdir -p -m 777 /data/videos/tools/nat_v2ray
-  docker run -d --name=nat_v2ray --restart=always -e PUID=$uid -e PGID=$gid -v /data/videos/tools/nat_v2ray:/config v2fly/v2fly-core run -c /config/config.json
+  docker run -d \
+    --name=nat_v2ray \
+    --restart=always \
+    -e PUID=$uid \
+    -e PGID=$gid \
+    -v /data/videos/tools/nat_v2ray:/config \
+    v2fly/v2fly-core \
+    run -c /config/config.json
 else
   echo "nat_v2ray 容器已存在 不用创建"
 fi
@@ -204,7 +312,18 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qbittorrent ..."
   docker pull linuxserver/qbittorrent
   mkdir -p -m 777 /data/videos/tools/qbittorrent
-  docker run -d --name=qbittorrent --restart=always -e PUID=$uid -e WEBUI_PORT=8081 -e PGID=$gid -p 8081:8081 -p 23456:23456 -p 23456:23456/udp -v /data/videos/tools/qbittorrent:/config -v /data/videos/media/downloads:/downloads linuxserver/qbittorrent
+  docker run -d \
+    --name=qbittorrent \
+    --restart=always \
+    -e PUID=$uid \
+    -e WEBUI_PORT=8081 \
+    -e PGID=$gid \
+    -p 8081:8081 \
+    -p 23456:23456 \
+    -p 23456:23456/udp \
+    -v /data/videos/tools/qbittorrent:/config \
+    -v /data/videos/media/downloads:/downloads \
+    linuxserver/qbittorrent
 else
   echo "qbittorrent 容器已存在 不用创建"
 fi
@@ -215,7 +334,12 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qiandao ..."
   docker pull a76yyyy/qiandao
   mkdir -p -m 777 /data/videos/tools/qiandao
-  docker run -d --name=qiandao --restart=always -p 8923:80 -v /data/videos/tools/qiandao:/usr/src/app/config a76yyyy/qiandao
+  docker run -d \
+    --name=qiandao \
+    --restart=always \
+    -p 8923:80 \
+    -v /data/videos/tools/qiandao:/usr/src/app/config \
+    a76yyyy/qiandao
 else
   echo "qiandao 容器已存在 不用创建"
 fi
@@ -225,7 +349,13 @@ container=$(docker ps -q -f name="flaresolverr")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 flaresolverr ..."
   docker pull flaresolverr/flaresolverr
-  docker run -d --name=flaresolverr --restart=always -p 8191:8191 -e LOG_LEVEL=info -e TZ="Asia/Shanghai" flaresolverr/flaresolverr
+  docker run -d \
+    --name=flaresolverr \
+    --restart=always \
+    -p 8191:8191 \
+    -e LOG_LEVEL=info \
+    -e TZ="Asia/Shanghai" \
+    flaresolverr/flaresolverr
 else
   echo "flaresolverr 容器已存在 不用创建"
 fi
@@ -237,7 +367,17 @@ if [ -z "$container" ]; then
   docker pull xiaokai2022/nginx_webext
   mkdir -p -m 777 /data/videos/tools/
   cp -r $(dirname $0)/nginx /data/videos/tools
-  docker run -d --name=nginx -e PUID=$uid --restart=always -p 8880:8880 -p 8080:8080 -p 80:80 -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /data/videos/tools/nginx:/nginx -v /data/videos/media:/media xiaokai2022/nginx_webext
+  docker run -d \
+    --name=nginx \
+    -e PUID=$uid \
+    --restart=always \
+    -p 8880:8880 \
+    -p 8080:8080 \
+    -p 80:80 \
+    -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
+    -v /data/videos/tools/nginx:/nginx \
+    -v /data/videos/media:/media \
+    xiaokai2022/nginx_webext
 else
   echo "nginx 容器已存在 不用创建"
 fi
@@ -247,7 +387,13 @@ container=$(docker ps -q -f name="glances")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 glances ..."
   docker pull nicolargo/glances
-  docker run -d --name=glances --restart="always" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro nicolargo/glances
+  docker run -d \
+    --name=glances \
+    --restart="always" \
+    -p 61208-61209:61208-61209 \
+    -e GLANCES_OPT="-w" \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    nicolargo/glances
 else
   echo "glances 容器已存在 不用创建"
 fi
@@ -258,8 +404,24 @@ if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 resilio-sync ..."
   docker pull linuxserver/resilio-sync
   mkdir -p -m 777 /data/videos/tools/resilio-sync
-  docker run -d --name=resilio-sync -e PUID=$uid -e PGID=$gid -e TZ=Asia/Chongqing -p 8888:8888 -p 55555:55555 -v /data/videos/tools/resilio-sync/config:/config -v /data/videos/tools/resilio-sync/downloads:/downloads -v /data/videos/media/sync:/sync --restart always linuxserver/resilio-sync
-  cp $(dirname $0)/ResilioSyncPro.btskey /data/videos/tools/resilio-sync/config/
+  docker run -d \
+    --name=resilio-sync \
+    -e PUID=$uid \
+    -e PGID=$gid \
+    -e TZ=Asia/Chongqing \
+    -p 8888:8888 \
+    -p 55555:55555 \
+    -v /data/videos/tools/resilio-sync/config:/config \
+    -v /data/videos/tools/resilio-sync/downloads:/downloads \
+    -v /data/videos/media/sync:/sync \
+    --restart always \
+    linuxserver/resilio-sync
+
+  sleep 3
+  cp $(
+    cd "$(dirname "$0")"
+    pwd
+  )/ResilioSyncPro.btskey /data/videos/tools/resilio-sync/config/
 else
   echo "resilio-sync 容器已存在 不用创建"
 fi
