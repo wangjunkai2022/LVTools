@@ -46,6 +46,10 @@ mkdir -p -m 777 /data/videos/media/series/其他地区
 mkdir -p -m 777 /data/videos/media/downloads
 
 # 检查容器是否存在 prowlarr
+if [ "$1" == "prowlarr" ]; then
+  docker stop prowlarr
+  docker rm prowlarr
+fi
 container=$(docker ps -q -f name="prowlarr")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 prowlarr ..."
@@ -62,6 +66,10 @@ else
 fi
 
 # 检查容器是否存在 portainer
+if [ "$1" == "portainer" ]; then
+  docker stop portainer
+  docker rm portainer
+fi
 container=$(docker ps -q -f name="portainer")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 portainer ..."
@@ -77,6 +85,10 @@ else
 fi
 
 # 检查容器是否存在 sonarr
+if [ "$1" == "sonarr" ]; then
+  docker stop sonarr
+  docker rm sonarr
+fi
 container=$(docker ps -q -f name="sonarr")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 sonarr ..."
@@ -95,6 +107,10 @@ else
 fi
 
 # 检查容器是否存在 radarr
+if [ "$1" == "radarr" ]; then
+  docker stop radarr
+  docker rm radarr
+fi
 container=$(docker ps -q -f name="radarr")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 radarr ..."
@@ -113,6 +129,10 @@ else
 fi
 
 # 检查容器是否存在 aria2-pro
+if [ "$1" == "aria2-pro" ]; then
+  docker stop aria2-pro
+  docker rm aria2-pro
+fi
 container=$(docker ps -q -f name="aria2-pro")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 aria2-pro ..."
@@ -135,34 +155,11 @@ else
   echo "aria2-pro 容器已存在 不用创建"
 fi
 
-# 检查容器是否存在 embyserver
-container=$(docker ps -q -f name="embyserver")
-if [ -z "$container" ]; then
-  echo "容器不存在，正在创建容器 embyserver ..."
-  #  docker pull emby/embyserver:latest
-  #  docker pull linuxserver/emby:latest
-  #  docker pull xinjiawei1/emby_unlockd # 解锁版
-  docker pull xiaokai2022/embyserver:latest
-  #  mkdir -p -m 777 /data/videos/tools/embyserver
-  docker run -d \
-    --name embyserver \
-    --env HTTP_PROXY="$proxy_ip" \
-    --env HTTPS_PROXY="$proxy_ip" \
-    --env NO_PROXY="127.0.0.1,localhost,192.168.*" \
-    -e PUID=$uid -e PGID=$gid \
-    --device /dev/dri:/dev/dri \
-    -v /data/videos/tools/embyserver:/config \
-    -v /data/videos/media:/media \
-    -p 8096:8096 \
-    -p 8920:8920 \
-    --restart always \
-    xiaokai2022/embyserver
-#  docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xinjiawei1/emby_unlockd
-else
-  echo "embyserver 容器已存在 不用创建"
-fi
-
 # 检查容器是否存在 ombi
+if [ "$1" == "ombi" ]; then
+  docker stop ombi
+  docker rm ombi
+fi
 container=$(docker ps -q -f name="ombi")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 ombi ..."
@@ -186,6 +183,10 @@ else
 fi
 
 # 检查容器是否存在 chinesesubfinder
+if [ "$1" == "chinesesubfinder" ]; then
+  docker stop chinesesubfinder
+  docker rm chinesesubfinder
+fi
 container=$(docker ps -q -f name="chinesesubfinder")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 chinesesubfinder ..."
@@ -211,6 +212,10 @@ else
 fi
 
 # 检查容器是否存在 bazarr
+if [ "$1" == "bazarr" ]; then
+  docker stop bazarr
+  docker rm bazarr
+fi
 container=$(docker ps -q -f name="bazarr")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 bazarr ..."
@@ -231,6 +236,10 @@ else
 fi
 
 # 检查容器是否存在 alist
+if [ "$1" == "alist" ]; then
+  docker stop alist
+  docker rm alist
+fi
 container=$(docker ps -q -f name="alist")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 alist ..."
@@ -249,7 +258,43 @@ else
   echo "alist 容器已存在 不用创建"
 fi
 
+# 检查容器是否存在 embyserver
+if [ "$1" == "embyserver" ]; then
+  docker stop embyserver
+  docker rm embyserver
+fi
+container=$(docker ps -q -f name="embyserver")
+if [ -z "$container" ]; then
+  echo "容器不存在，正在创建容器 embyserver ..."
+  #  docker pull emby/embyserver:latest
+  #  docker pull linuxserver/emby:latest
+  #  docker pull xinjiawei1/emby_unlockd # 解锁版
+  docker pull xiaokai2022/embyserver:latest
+  #  mkdir -p -m 777 /data/videos/tools/embyserver
+  docker run -d \
+    --name embyserver \
+    --env HTTP_PROXY="$proxy_ip" \
+    --env HTTPS_PROXY="$proxy_ip" \
+    --env NO_PROXY="127.0.0.1,localhost,192.168.*" \
+    -e PUID=$uid -e PGID=$gid \
+    --device /dev/dri:/dev/dri \
+    -v /data/videos/tools/embyserver:/config \
+    -v /data/videos/media:/media:shared \
+    -p 8096:8096 \
+    -p 8920:8920 \
+    --restart always \
+    --pull always \
+    xiaokai2022/embyserver
+#  docker run -d --name embyserver --env HTTP_PROXY="$proxy_ip" --env HTTPS_PROXY="$proxy_ip" --env NO_PROXY="127.0.0.1,localhost,192.168.*" -e PUID=$uid -e PGID=$gid --device /dev/dri:/dev/dri -v /data/videos/tools/embyserver:/config -v /data/videos/media:/media -p 8096:8096 -p 8920:8920 --restart always xinjiawei1/emby_unlockd
+else
+  echo "embyserver 容器已存在 不用创建"
+fi
+
 # 检查容器是否存在 jackett
+if [ "$1" == "jackett" ]; then
+  docker stop jackett
+  docker rm jackett
+fi
 container=$(docker ps -q -f name="jackett")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 jackett ..."
@@ -269,6 +314,10 @@ else
 fi
 
 # 检查容器是否存在 v2ray ##这个是用来代理的 穿透是另外一个
+if [ "$1" == "proxy_v2ray" ]; then
+  docker stop proxy_v2ray
+  docker rm proxy_v2ray
+fi
 container=$(docker ps -q -f name="proxy_v2ray")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 proxy_v2ray ..."
@@ -289,6 +338,10 @@ else
 fi
 
 # 检查容器是否存在 v2ray ##这个是用来穿透内网
+if [ "$1" == "nat_v2ray" ]; then
+  docker stop nat_v2ray
+  docker rm nat_v2ray
+fi
 container=$(docker ps -q -f name="nat_v2ray")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 nat_v2ray ..."
@@ -307,6 +360,10 @@ else
 fi
 
 # 检查容器是否存在 qbittorrent
+if [ "$1" == "qbittorrent" ]; then
+  docker stop qbittorrent
+  docker rm qbittorrent
+fi
 container=$(docker ps -q -f name="qbittorrent")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qbittorrent ..."
@@ -329,6 +386,10 @@ else
 fi
 
 # 检查容器是否存在 qiandao
+if [ "$1" == "qiandao" ]; then
+  docker stop qiandao
+  docker rm qiandao
+fi
 container=$(docker ps -q -f name="qiandao")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 qiandao ..."
@@ -345,6 +406,10 @@ else
 fi
 
 # 检查容器是否存在 flaresolverr 配合一些pt签到使用（代理验证cf）
+if [ "$1" == "flaresolverr" ]; then
+  docker stop flaresolverr
+  docker rm flaresolverr
+fi
 container=$(docker ps -q -f name="flaresolverr")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 flaresolverr ..."
@@ -361,6 +426,10 @@ else
 fi
 
 # 检查容器是否存在 nginx
+if [ "$1" == "nginx" ]; then
+  docker stop nginx
+  docker rm nginx
+fi
 container=$(docker ps -q -f name="nginx")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 nginx ..."
@@ -383,6 +452,10 @@ else
 fi
 
 # 检查容器是否存在 glances 系统监控
+if [ "$1" == "glances" ]; then
+  docker stop glances
+  docker rm glances
+fi
 container=$(docker ps -q -f name="glances")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 glances ..."
@@ -399,6 +472,10 @@ else
 fi
 
 # 检查容器是否存在 resilio-sync 系统监控
+if [ "$1" == "resilio-sync" ]; then
+  docker stop resilio-sync
+  docker rm resilio-sync
+fi
 container=$(docker ps -q -f name="resilio-sync")
 if [ -z "$container" ]; then
   echo "容器不存在，正在创建容器 resilio-sync ..."

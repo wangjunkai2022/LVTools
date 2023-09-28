@@ -85,7 +85,7 @@ docker run -d --name rclone-alist \
   --network-mode \
   --vfs-cache-mode full \
   --vfs-cache-max-size 100G \
-  --vfs-cache-max-age 6h \
+  --vfs-cache-max-age 12h \
   --vfs-read-chunk-size-limit off \
   --buffer-size 64K \
   --vfs-read-chunk-size 64K \

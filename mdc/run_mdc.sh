@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #需要扫描的地址
-path=/data/videos/media/alist/PikPak3/sehuatang/亚洲无码原创
+path=/data/videos/media/alist/PikPak3/sehuatang/亚洲无码原创/无码破解
 filepath=$(
   cd "$(dirname "$0")"
   pwd
@@ -16,6 +16,7 @@ find $path -name "*社*区*最*新*情*报*" -print0 | xargs -0 rm -rf          
 find $path -name "*社*區*最*新*情*報*" -print0 | xargs -0 rm -rf                         ##可以删除带空格
 find $path -name "*x*u*u*c*o*m*" -print0 | xargs -0 rm -rf                                     ##可以删除带空格
 find $path -name "*新*片*首*发*" -print0 | xargs -0 rm -rf                                 ##可以删除带空格
+find $path -name "UUE29.mp4" -print0 | xargs -0 rm -rf                                         ##可以删除带空格
 
 python3 $filepath/change_name_fc2.py "$path"
 
