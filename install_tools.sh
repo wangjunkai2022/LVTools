@@ -128,18 +128,18 @@ else
   echo "radarr 容器已存在 不用创建"
 fi
 
-# 检查容器是否存在 aria2-pro
-if [ "$1" == "aria2-pro" ]; then
-  docker stop aria2-pro
-  docker rm aria2-pro
+# 检查容器是否存在 aria2_pro
+if [ "$1" == "aria2_pro" ]; then
+  docker stop aria2_pro
+  docker rm aria2_pro
 fi
-container=$(docker ps -q -f name="aria2-pro")
+container=$(docker ps -q -f name="aria2_pro")
 if [ -z "$container" ]; then
-  echo "容器不存在，正在创建容器 aria2-pro ..."
+  echo "容器不存在，正在创建容器 aria2_pro ..."
   docker pull p3terx/aria2-pro
   mkdir -p -m 777 /data/videos/tools/aria2
   docker run -d \
-    --name aria2-pro \
+    --name aria2_pro \
     -e PUID=$uid -e PGID=$gid \
     --restart always \
     --log-opt max-size=1m \
@@ -152,7 +152,7 @@ if [ -z "$container" ]; then
     p3terx/aria2-pro
 
 else
-  echo "aria2-pro 容器已存在 不用创建"
+  echo "aria2_pro 容器已存在 不用创建"
 fi
 
 # 检查容器是否存在 ombi
@@ -472,24 +472,24 @@ else
   echo "glances 容器已存在 不用创建"
 fi
 
-# 检查容器是否存在 resilio-sync 系统监控
-if [ "$1" == "resilio-sync" ]; then
-  docker stop resilio-sync
-  docker rm resilio-sync
+# 检查容器是否存在 resilio_sync 系统监控
+if [ "$1" == "resilio_sync" ]; then
+  docker stop resilio_sync
+  docker rm resilio_sync
 fi
-container=$(docker ps -q -f name="resilio-sync")
+container=$(docker ps -q -f name="resilio_sync")
 if [ -z "$container" ]; then
-  echo "容器不存在，正在创建容器 resilio-sync ..."
+  echo "容器不存在，正在创建容器 resilio_sync ..."
   docker pull linuxserver/resilio-sync
-  mkdir -p -m 777 /data/videos/tools/resilio-sync
+  mkdir -p -m 777 /data/videos/tools/resilio_sync
   docker run -d \
-    --name=resilio-sync \
+    --name=resilio_sync \
     --env UID=$uid --env GID=$gid \
     -e TZ=Asia/Chongqing \
     -p 8888:8888 \
     -p 55555:55555 \
-    -v /data/videos/tools/resilio-sync/config:/config \
-    -v /data/videos/tools/resilio-sync/downloads:/downloads \
+    -v /data/videos/tools/resilio_sync/config:/config \
+    -v /data/videos/tools/resilio_sync/downloads:/downloads \
     -v /data/videos/media/sync:/sync \
     --restart always \
     linuxserver/resilio-sync
@@ -498,7 +498,7 @@ if [ -z "$container" ]; then
   cp $(
     cd "$(dirname "$0")"
     pwd
-  )/ResilioSyncPro.btskey /data/videos/tools/resilio-sync/config/
+  )/ResilioSyncPro.btskey /data/videos/tools/resilio_sync/config/
 else
-  echo "resilio-sync 容器已存在 不用创建"
+  echo "resilio_sync 容器已存在 不用创建"
 fi
