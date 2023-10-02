@@ -79,20 +79,23 @@ docker run -d --name rclone-alist \
   mount alist_webdav:/ /data \
   --cache-dir /cache \
   --allow-other \
+  --allow-root \
   --allow-non-empty \
+  --file-perms 0777 \
   --multi-thread-streams 1024 \
   --multi-thread-cutoff 128M \
   --network-mode \
   --vfs-cache-mode full \
   --vfs-cache-max-size 100G \
   --vfs-cache-max-age 12h \
-  --vfs-read-chunk-size-limit off \
   --buffer-size 64K \
-  --vfs-read-chunk-size 64K \
+  --vfs-read-chunk-size 1M \
+  --vfs-read-chunk-size-limit 50M \
+  --no-modtime \
+  --no-checksum \
   --vfs-read-wait 0ms \
   -v \
-  --vfs-read-chunk-size-limit 64K \
-  --vfs-read-wait 0ms \
+  --ignore-size \
   --log-file /config/log/log.txt
 
 #--multi-thread-streams 1024 --multi-thread-cutoff 128M --network-mode --vfs-cache-mode full --vfs-cache-max-size 100G --vfs-cache-max-age 240000h --vfs-read-chunk-size-limit off --buffer-size 64K --vfs-read-chunk-size 64K --vfs-read-wait 0ms -v --vfs-read-chunk-size-limit 64K --vfs-read-wait 0ms -v -vv

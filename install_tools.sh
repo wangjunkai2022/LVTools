@@ -276,9 +276,10 @@ if [ -z "$container" ]; then
     --env HTTP_PROXY="$proxy_ip" \
     --env HTTPS_PROXY="$proxy_ip" \
     --env NO_PROXY="127.0.0.1,localhost,192.168.*" \
-    -e PUID=$uid -e PGID=$gid \
+    --env UID=$uid --env GID=$gid \
     --device /dev/dri:/dev/dri \
-    -v /data/videos/tools/embyserver:/config \
+    -v /data/videos/tools/embyserver/config:/config \
+    -v /data/videos/tools/embyserver/backup:/backup \
     -v /data/videos/media:/media:shared \
     -p 8096:8096 \
     -p 8920:8920 \
@@ -483,8 +484,7 @@ if [ -z "$container" ]; then
   mkdir -p -m 777 /data/videos/tools/resilio-sync
   docker run -d \
     --name=resilio-sync \
-    -e PUID=$uid \
-    -e PGID=$gid \
+    --env UID=$uid --env GID=$gid \
     -e TZ=Asia/Chongqing \
     -p 8888:8888 \
     -p 55555:55555 \
