@@ -441,8 +441,7 @@ if [ -z "$container" ]; then
     --name=nginx \
     -e PUID=$uid \
     --restart=always \
-    -p 8880:8880 \
-    -p 8080:8080 \
+    -p 443:443 \
     -p 80:80 \
     -v /data/videos/tools/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
     -v /data/videos/tools/nginx:/nginx \
