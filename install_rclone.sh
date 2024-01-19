@@ -3,7 +3,13 @@
 docker pull rclone/rclone
 #下面这句话不知道有什么用现在
 #docker volume create rclonevolume -d rclone -o type=sftp -o sftp-host=_hostname_ -o sftp-user=_username_ -o sftp-pass=_password_ -o allow-other=true
+workdir=$(
+  cd $(dirname $0)
+  pwd
+)
 
+config_root_path=$workdir/rclone
+alist_root_path=$workdir/rclone/data
 echo "是否生成配置文件(y/生成 c/复制已有的文件自己修改)"
 read answer
 if [ "$answer" == "y" ]; then
@@ -50,27 +56,27 @@ if [ "$answer" == "y" ]; then
 # admin
 # 密码
 elif [ "$answer" == "c" ]; then
-  mkdir -p -m 777 /data/videos/tools/rclone/config/
+  mkdir -p -m 777 $config_root_path/config/
   cp $(
     cd "$(dirname "$0")"
     pwd
-  )/rclone/rclone.conf /data/videos/tools/rclone/config/
+  )/rclone/rclone.conf $config_root_path/config/
 
   echo "更具需要修改配置文件"
 fi
-docker run -it --rm --name rclone_temp -v /data/videos/tools/rclone/config:/config/rclone rclone/rclone config
+docker run -it --rm --name rclone_temp -v $config_root_path/config:/config/rclone rclone/rclone config
 
 #查看是否生成了 alist_webdav 的配置
-docker run -it --rm --name rclone_temp -v /data/videos/tools/rclone/config:/config/rclone rclone/rclone listremotes
+docker run -it --rm --name rclone_temp -v $config_root_path/config:/config/rclone rclone/rclone listremotes
 
 #把 alist_webdav 挂载到硬盘 /data/videos/media/alist 中
 docker run -d --name rclone-alist \
   -v /etc/passwd:/etc/passwd:ro \
   -v /etc/group:/etc/group:ro \
-  -v /data/videos/tools/rclone/config:/config/rclone \
-  -v /data/videos/tools/rclone/log:/config/log \
-  -v /data/videos/media/alist:/data:shared \
-  -v /data/videos/tools/rclone/cache:/cache \
+  -v $config_root_path/config:/config/rclone \
+  -v $config_root_path/log:/config/log \
+  -v $alist_root_path:/data:shared \
+  -v $config_root_path/cache:/cache \
   --device /dev/fuse:/dev/fuse \
   --cap-add SYS_ADMIN \
   --security-opt apparmor:unconfined \
