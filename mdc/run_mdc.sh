@@ -3,8 +3,8 @@
 #需要扫描的地址
 #path=/data/videos/media/alist/PikPak4/sehuatang/亚洲无码原创/无码破解
 #path=/data/videos/media/alist/PikPak4/sehuatang
-path='/data/videos/media/alist/JAV合集一/JAV合集一'
-#path=/data/videos/media/alist/SukebeiEnyo合集一
+#path='/data/videos/media/alist/JAV合集一/JAV合集一'
+path=/data/videos/media/alist/SukebeiEnyo合集一
 #path=./
 filepath=$(
   cd "$(dirname "$0")"
@@ -37,4 +37,5 @@ mkdir -p -m 777 ~/mdc_config
 cp $(dirname $0)/mdc.ini ~/mdc_config/
 
 docker run --rm -e UID=0 -e GID=0 -it -v $path:/videos -v ~/mdc_config:/config xiaokai2022/mdc
+#docker run --rm -e UID=0 -e GID=0 -it -v $path:/videos -v ~/mdc_config:/config xiaokai2022/mdc /videos/NASS-673-CD2.mkv -n NASS-673
 #docker run --rm --name mdc_test1 -it -v $path:/videos -v ~/mdc_config:/config -e UID=0 -e GID=0 xiaokai2022/mdc

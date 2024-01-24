@@ -59,19 +59,19 @@ class changefc2:
     def __init__(self, folder_path="./"):
         print("开始扫描这个文件夹：", folder_path)
         files = _get_files_in_folder(folder_path)
-        # files = ["/data/videos/media/alist/SukebeiEnyo合集一/SukebeiEnyo合集一/Fc2 PPV 2634136/Fc2 PPV 2634136 1.mp4", ]
+        # files = ["/videos/SukebeiEnyo合集一/Fc2 PPV 1535736- 1541275-1525602(Uncensored Leaked) 【無修正】由○可○ 流出 part 3/Fc2 PPV 1535736 (Uncensored Leaked)【初流出】星野 瞳【削除必須】某メーカーからの流出作品① (Hitomi Hoshino ).mp4", ]
         for file in files:
             # 分里文件夹和文件
             file_name, file_name_extension, file_path = _GetFileNameAll(file)
             file_name = file_name.lower()
+            file_name = file_name.replace("  ", " ")
             isChange = False
             if re.search(r'fc2ppv-(\d)+', file_name, re.IGNORECASE) \
-                    or re.search(r"Fc2 PPV (\d)+", file_name, re.IGNORECASE) \
-                    or re.search(r"Fc2 PPV  (\d)+", file_name,
-                                 re.IGNORECASE):
+                    or re.search(r"Fc2 PPV (\d)+", file_name, re.IGNORECASE):
                 file_name = file_name.replace("fc2ppv", "fc2")
                 file_name = file_name.replace("fc2 ppv ", "fc2-")
-                file_name = file_name.replace("fc2 ppv  ", "fc2-")
+                # file_name = file_name.replace("fc2 ppv  ", "fc2-")
+                # num_re = re.search(r'- \d+-\d', file_name)
                 num_re = re.search(r'-\d+-\d', file_name) or re.search(r'-\d+ \d', file_name)
                 if num_re:
                     num = num_re.group()[-1]
@@ -88,11 +88,11 @@ class changefc2:
             file_name_all = file_name.upper() + file_name_extension
             __file_name_all_path = os.path.join(file_path, file_name_all)
             try:
-                # while not os.path.exists(__file_name_all_path):
-                #     print("修改文件{}为{}".format(file, __file_name_all_path))
-                #     os.rename(file, __file_name_all_path)
-                #     time.sleep(1)
-                print("修改文件\n{}\n为\n{}\n".format(file, __file_name_all_path))
+                while not os.path.exists(__file_name_all_path):
+                    print("修改文件{}为{}".format(file, __file_name_all_path))
+                    os.rename(file, __file_name_all_path)
+                    time.sleep(1)
+                # print("修改文件\n{}\n为\n{}\n".format(file, __file_name_all_path))
             except OSError as e:
                 print("移动失败:{}".format(e))
 
