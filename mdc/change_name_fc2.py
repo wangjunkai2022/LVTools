@@ -54,7 +54,7 @@ def _GetFileNameAll(file):
     return file_name, file_name_extension, file_path
 
 
-class changefc2:
+class ChangeFc2ppvToFC2:
 
     def __init__(self, folder_path="./"):
         print("开始扫描这个文件夹：", folder_path)
@@ -89,7 +89,7 @@ class changefc2:
             __file_name_all_path = os.path.join(file_path, file_name_all)
             try:
                 while not os.path.exists(__file_name_all_path):
-                    print("修改文件{}为{}".format(file, __file_name_all_path))
+                    print("修改文件\n{}\n为\n{}".format(file, __file_name_all_path))
                     os.rename(file, __file_name_all_path)
                     time.sleep(1)
                 # print("修改文件\n{}\n为\n{}\n".format(file, __file_name_all_path))
@@ -177,7 +177,7 @@ class CD2CD:
 
 
 if __name__ == '__main__':
-    changefc2(sys.argv[1] or None)
+    ChangeFc2ppvToFC2(sys.argv[1] or None)
     # ChangeABC2CD(sys.argv[1] or None)
     # CD2CD(sys.argv[1] or None, "../")
     # changefc2()
