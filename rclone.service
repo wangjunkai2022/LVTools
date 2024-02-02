@@ -1,0 +1,15 @@
+[Unit]
+Description=Rclone
+After=alist.service
+Requires=alist.service
+
+[Service]
+ExecStartPre=/bin/sleep 2
+Type=simple
+ExecStart=rclone mount alist_webdav:/ /mnt/alist --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --cache-dir=/mnt/alist_cache --vfs-cache-mode full --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 16M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
+ExecStop=fusermount -u /mnt/alist
+Restart=on-abort
+User=root
+
+[Install]
+WantedBy=default.target
