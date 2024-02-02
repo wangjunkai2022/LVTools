@@ -21,7 +21,7 @@ import sys
 import time
 
 exclude = ["JAV_failed", 'JAV_output', '无码破解']
-video_exclude = ['mp4', 'mkv', 'avi', 'mov', 'wmv', 'flv']
+video_exclude = ['mp4', 'mkv', 'avi', 'mov', 'wmv', 'flv', 'ts']
 replace_endswith = {
     # 'fc2ppv':"fc2", # 需要正则匹配这里不添加
     # '-u': '',
@@ -41,7 +41,7 @@ def _get_files_in_folder(folder_path):
         # dirs[:] = [(d for d in dirs if d not in exclude) and (fs.endswith(end) for end in video_exclude)]
         for f in fs:
             for end in video_exclude:
-                if f.endswith(end):
+                if f.lower().endswith(end):
                     files.append(os.path.join(fpathe, f))
     return files
 
@@ -176,8 +176,225 @@ class CD2CD:
                     print("移动失败:{}".format(e))
 
 
+def __subRepl(s):
+    s = re.sub("(\s|-|_)", "", s.group())
+    number = int(f"0x{s}", 16) - 9
+    return f"-CD{number}"
+
+
+class ChangeRuleToNumber:
+    # __G_TAKE_NUM_RULES = {
+    #     "ABP": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("ABP\s+", "ABP-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "ABW": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("ABW\s+", "ABW-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "ADN": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                       str(re.sub("ADN\s+", "ADN-", x, re.IGNORECASE)))
+    #                )
+    #     ),
+    #     "AVO": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("AVO(P)?\s+", "AVOP-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "BBI": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("BBI\s+", "BBI-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "BGN": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl, str(re.sub("BGN\s+", "BGN-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "BIJN": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("BIJN\s+", "BIJN-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "DASD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("DASD\s+", "DASD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "DV": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl, str(re.sub("DV\s+", "DV-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "EBOD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("EBOD\s+", "EBOD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "EYAN": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("EYAN\s+", "EYAN-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "FC2": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("FC2\s+(PPV)?\s+", "FC2-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "FCDSS": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("FCDSS\s+", "FCDSS-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "HBAD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("HBAD\s+", "HBAD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "HND": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("HND\s+", "HBAD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "HUNTB": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("HUNTB\s+", "HUNTB-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "IPTD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("IPTD\s+", "IPTD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "IPX": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("IPX\s+", "IPX-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "IPZ": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("IPZ\s+", "IPZ-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "JUL": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("JUL\s+", "JUL-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "JUX": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("JUX\s+", "JUX-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "MDYD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("MDYD\s+", "MDYD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "MIAD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("MIAD\s+", "MIAD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "MIDD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("MIDD\s+", "MIDD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "MIDE": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("MIDE\s+", "MIDE-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "MIGD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("MIGD\s+", "MIGD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "MXGS": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("MXGS\s+", "MXGS-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "ONED": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("ONED\s+", "ONED-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "PGD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("PGD\s+", "PGD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "PPPD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("PPPD\s+", "PPPD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "PRED": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("PRED\s+", "PRED-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "RBD": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("RBD\s+", "RBD-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "RBK": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("RBK\s+", "RBK-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "SDNM": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("SDNM\s+", "SDNM-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    #     "SEND": lambda x: str(
+    #         re.sub("(\s|-|_)[A-F](\s+|-|_)?", __subRepl,
+    #                str(re.sub("SEND\s+", "SEND-", x, re.IGNORECASE))
+    #                )
+    #     ),
+    # 
+    # }
+
+    def __init__(self, path):
+        videos = _get_files_in_folder(path)
+        for file in videos:
+            file_name, file_name_extension, file_path = _GetFileNameAll(file)
+            # for k, v in self.__G_TAKE_NUM_RULES.items():
+            #     if re.search(k, file_name, re.I):
+            #         filename = v(file_name)
+            #         if filename != file_name:
+            #             new_file_all_name = os.path.join(file_path, filename + file_name_extension)
+            #             print(f"文件\n{file}\n替换为\n{new_file_all_name}")
+            # re_name = re.search(r"[A-Z]+(\s|-|_)+\d\d\d(?!\d)", file_name)
+            # if re_name:
+            #     print(f"文件名是：\n{file_name}\n匹配的字段是：\n{re_name.group()}")
+            #     continue
+
+            # re_name = re.search("FC2(\s|-|_)*\d{7}", file_name.upper())
+            # if re_name:
+            #     print(f"FC2文件名是：\n{file_name}\n匹配的字段是：\n{re_name.group()}")
+            #     continue
+
+            re_name = re.search(r"FC2(?=(\s|-|_)PPV)", file_name.upper())
+            if re_name:
+                print(f"FC2文件名是222：\n{file_name}\n匹配的字段是：\n{re_name.group()}123123")
+                continue
+
+
 if __name__ == '__main__':
-    ChangeFc2ppvToFC2(sys.argv[1] or None)
+    # ChangeFc2ppvToFC2(sys.argv[1] or None)
+    ChangeRuleToNumber(sys.argv[1] or None)
     # ChangeABC2CD(sys.argv[1] or None)
     # CD2CD(sys.argv[1] or None, "../")
     # changefc2()
+    # substr = re.sub("(\s|-|_)[A-F](\s+|-|_)?", sub, "HUNTB 079 A")
+    # print(substr)
+    # file_name = "FC2 PPV 2539001 【100個限定2980→1480ptにOFF!】ほぼ処女？ガチ素人！人生2回目のセックス！処女喪失時にトラウマになり…、緊張感伝わるガチ映像です。※レビュー特典／高画質Ver.TS"
+    # re_name = re.search("FC2(?=(\s|\w))*(\s|-|_)*\d{7}", file_name.upper())
+    # print(re_name)
