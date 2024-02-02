@@ -136,8 +136,9 @@ docker run -d --name rclone-alist \
 #--allow-non-empty --no-gzip-encoding  --umask 000 --allow-other --attr-timeout 10m --vfs-cache-mode full --vfs-cache-max-age 1m --vfs-read-chunk-size-limit 100M --buffer-size 100M --vfs-cache-max-size 10G --daemon
 
 #https://github.com/cgkings/script-store
+
 # 扫库
-# rclone mount alist_webdav:/ /mnt/alist --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --cache-dir=/mnt/alist_cache --vfs-cache-mode full --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 16M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
+# rclone mount alist_webdav:/ /mnt/alist --cache-dir=/tmp/alist_cache --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --vfs-cache-mode full --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 16M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
 
 #观看
-#--cache-dir=/home/cache --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --vfs-cache-mode full --buffer-size 512M --vfs-read-chunk-size 16M --vfs-read-chunk-size-limit 64M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
+# rclone mount alist_webdav:/ /mnt/alist --cache-dir=/tmp/alist_cache --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --vfs-cache-mode full --buffer-size 512M --vfs-read-chunk-size 16M --vfs-read-chunk-size-limit 64M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
