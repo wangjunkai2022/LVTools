@@ -6,6 +6,8 @@ sudo tar -xzvf lobe-chat.tgz -C /opt
 #cd lobe-chat
 #sudo cat lobe-chat.tar.gz* | tar zx
 #sudo mv lobe-chat /opt
-cp /opt/lobe-chat/lobe-chat.service /etc/systemd/system/
+sudo cp /opt/lobe-chat/lobe-chat.service /etc/systemd/system/
 sudo systemctl enable lobe-chat.service
 sudo systemctl start lobe-chat.service
+rm lobe-chat.tgz
+
