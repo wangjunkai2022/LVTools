@@ -1,0 +1,14 @@
+[Unit]
+Description=Startup check_usage
+After=emby-server.service
+Requires=emby-server.service
+
+[Service]
+ExecStartPre=/bin/sleep 2
+Type=simple
+ExecStart=/usr/local/bin/check_usages.sh
+User=root
+Restart=always
+
+[Install]
+WantedBy=default.target
