@@ -67,11 +67,20 @@ remove_all_space2_() {
 
 }
 
-path=$1
-# 路径中删除最后的/
-if echo "$path" | grep -q -E '\/$'; then
-  path=${path:0:$((${#path} - 1))}
-fi
+remove_MacOs_File() {
+  path=$1
+  find "$path" -depth -name ".*" -type f |
+    while IFS= read -r file; do
+      echo "删除文件$file"
+      rm "$file"
+    done
+
+  find "$path" -depth -name "*DS_Store*" -type f |
+    while IFS= read -r file; do
+      echo "删除文件$file"
+      rm "$file"
+    done
+}
 
 folder_remove_child1leave() {
   path=$1
@@ -91,6 +100,15 @@ folder_remove_child1leave() {
   done
   find "$path" -mindepth 1 -type d -empty -delete
 }
+
+path=$1
+# 路径中删除最后的/
+if echo "$path" | grep -q -E '\/$'; then
+  path=${path:0:$((${#path} - 1))}
+fi
+
+
+remove_MacOs_File $path
 remove_all_space2_ $path
 folder_remove_child1leave $path
 # echo "$files"
