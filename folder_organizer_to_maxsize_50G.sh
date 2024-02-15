@@ -61,7 +61,7 @@ remove_all_space2_() {
   find "$path" -depth -name "* *" -type f |
     while IFS= read -r file; do
       newfile=$(dirname "$file")/$(basename "$file" | tr ' ' "$rep")
-      echo "替换文件夹：$file 为:$newfile"
+      echo "替换文件：$file 为:$newfile"
       mv "$file" "$newfile"
     done
 
@@ -114,6 +114,7 @@ fi
 remove_MacOs_File $path
 remove_all_space2_ $path
 folder_remove_child1leave $path
-# echo "$files"
+folder_organizer_max50G $path
+#echo "$path"
 
 # echo "All files have been moved to new folders."
