@@ -69,6 +69,10 @@ remove_all_space2_() {
 
 remove_MacOs_File() {
   path=$1
+  if [ ! -d "$path" ]; then
+    echo "$path 路径不存在"
+    exit 1
+  fi
   find "$path" -depth -name ".*" -type f |
     while IFS= read -r file; do
       echo "删除文件$file"
@@ -106,7 +110,6 @@ path=$1
 if echo "$path" | grep -q -E '\/$'; then
   path=${path:0:$((${#path} - 1))}
 fi
-
 
 remove_MacOs_File $path
 remove_all_space2_ $path
