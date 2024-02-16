@@ -84,25 +84,71 @@ remove_MacOs_File() {
       echo "删除文件$file"
       rm "$file"
     done
+
+  find "$path" -depth -name "*(*)*" -type f |
+    while IFS= read -r file; do
+      echo "删除文件$file"
+      rm "$file"
+    done
 }
 
 folder_remove_child1leave() {
   path=$1
+  temp_path="${path}_temp"
+  mkdir -p $temp_path
+  if [ ! -d "$path" ]; then
+    echo "$path 路径不存在"
+    exit 1
+  fi
+  for dir in "$path"/*/; do
+    echo "$dir"
+    mv "$dir"* "$temp_path"
+  done
+  #  rm -rf $path
+  #  mv $temp_path $path
+
+  #  #    find "$path" -maxdepth 2 -type d | while read -r dir; do # 这个会显示原文件夹
+  #  # 查找2级子目录
+  #  find "$path" -maxdepth 1 -type d | while read -r dir; do
+  #    if [ "$dir" == "$path" ]; then
+  #      echo
+  #    else
+  #      echo "开始移动文件$dir 到 $path"
+  #      #    mv "$dir" "$path"
+  #      echo "$dir" "$path"
+  #    fi
+  #    #    find "$dir" -mindepth 1 -type d -exec mv -t "$path" {} +
+  #    #    find "$dir" -mindepth 1 -type d -exec -empty -delete
+  #    #        echo "$dir"
+  #    #    echo "开始移动文件$dir 到 $path"
+  #    #    #    mv "$dir" "$path"
+  #    #    echo "$dir" "$path"
+  #  done
+  #  find "$path" -mindepth 1 -type d -empty -delete
+
+  #  subdirs=$(find "$path" -maxdepth 1 -type d)
+  #  for subdir in $subdirs; do
+  #    find "$subdir" -type f -exec mv {} "$path" \;
+  #  done
+}
+
+function move_failed_to_folder() {
+  path=$1
+  temp_path="${path}_temp"
+  mkdir -p $temp_path
   if [ ! -d "$path" ]; then
     echo "$path 路径不存在"
     exit 1
   fi
 
-  #    find "$path" -maxdepth 2 -type d | while read -r dir; do # 这个会显示原文件夹
-  # 查找2级子目录
-  find "$path" -mindepth 2 -type d | while read -r dir; do
-    #    find "$dir" -mindepth 1 -type d -exec mv -t "$path" {} +
-    #    find "$dir" -mindepth 1 -type d -exec -empty -delete
-    #        echo "$dir"
-    echo "开始移动文件$dir 到 $path"
-    mv "$dir" "$path"
-  done
-  find "$path" -mindepth 1 -type d -empty -delete
+  find "$path" ! \( -name "*u*u*r*" -o -name ".*" -o -name "*DS_Store*" \) -type f |
+    while IFS= read -r file; do
+      new_file=${file/$path/$temp_path}
+      new_dir=$(dirname "$new_file")
+      mkdir -p "$new_dir"
+      echo "移动文件$file 到 $new_dir 下"
+      mv "$file" "$new_dir"
+    done
 }
 
 path=$1
@@ -111,10 +157,10 @@ if echo "$path" | grep -q -E '\/$'; then
   path=${path:0:$((${#path} - 1))}
 fi
 
-remove_MacOs_File $path
-remove_all_space2_ $path
-folder_remove_child1leave $path
-folder_organizer_max50G $path
+#remove_MacOs_File $path
+#remove_all_space2_ $path
+#folder_remove_child1leave $path
+#folder_organizer_max50G $path
 #echo "$path"
-
+move_failed_to_folder $path
 # echo "All files have been moved to new folders."
