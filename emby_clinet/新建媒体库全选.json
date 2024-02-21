@@ -1,0 +1,104 @@
+{
+  "LibraryOptions": {
+    "EnableArchiveMediaFiles": false,
+    "EnablePhotos": true,
+    "ImportPlaylists": true,
+    "EnableRealtimeMonitor": true,
+    "ExtractChapterImagesDuringLibraryScan": true,
+    "EnableChapterImageExtraction": true,
+    "EnableMarkerDetectionDuringLibraryScan": false,
+    "EnableMarkerDetection": false,
+    "SaveLocalThumbnailSets": true,
+    "ThumbnailImagesIntervalSeconds": "-1",
+    "DownloadImagesInAdvance": false,
+    "EnableInternetProviders": true,
+    "ImportMissingEpisodes": false,
+    "SaveLocalMetadata": true,
+    "EnableAutomaticSeriesGrouping": true,
+    "PreferredMetadataLanguage": "",
+    "PreferredImageLanguage": "",
+    "MetadataCountryCode": "",
+    "SeasonZeroDisplayName": "Specials",
+    "AutomaticRefreshIntervalDays": 0,
+    "EnableEmbeddedTitles": false,
+    "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+    "SkipSubtitlesIfAudioTrackMatches": false,
+    "SaveSubtitlesWithMedia": true,
+    "SaveLyricsWithMedia": true,
+    "SubtitleDownloadMaxAgeDays": "0",
+    "LyricsDownloadMaxAgeDays": "0",
+    "RequirePerfectSubtitleMatch": true,
+    "ForcedSubtitlesOnly": true,
+    "EnableAudioResume": false,
+    "MinResumePct": "3",
+    "MaxResumePct": "90",
+    "MinResumeDurationSeconds": "120",
+    "MusicFolderStructure": null,
+    "ImportCollections": false,
+    "SaveMetadataHidden": false,
+    "EnableAdultMetadata": true,
+    "MinCollectionItems": 2,
+    "MetadataSavers": [
+      "Nfo"
+    ],
+    "TypeOptions": [
+      {
+        "Type": "Movie",
+        "MetadataFetchers": [
+          "TheMovieDb",
+          "TheTVDB",
+          "The Open Movie Database",
+          "Douban Emby Movie Provider",
+          "JavScraper"
+        ],
+        "MetadataFetcherOrder": [
+          "TheMovieDb",
+          "TheTVDB",
+          "The Open Movie Database",
+          "Douban Emby Movie Provider",
+          "JavScraper"
+        ],
+        "ImageFetchers": [
+          "TheTVDB",
+          "TheMovieDb",
+          "FanArt",
+          "Douban Emby Image Provider",
+          "JavScraper",
+          "The Open Movie Database",
+          "Screen Grabber"
+        ],
+        "ImageFetcherOrder": [
+          "TheTVDB",
+          "TheMovieDb",
+          "FanArt",
+          "Douban Emby Image Provider",
+          "JavScraper",
+          "The Open Movie Database",
+          "Screen Grabber"
+        ]
+      }
+    ],
+    "LocalMetadataReaderOrder": [
+      "Nfo"
+    ],
+    "SubtitleDownloadLanguages": [
+      "zh-CN",
+      "zh-TW",
+      "zh-HK"
+    ],
+    "LyricsDownloadLanguages": [],
+    "DisabledLocalMetadataReaders": [],
+    "DisabledSubtitleFetchers": [],
+    "SubtitleFetcherOrder": [
+      "Open Subtitles"
+    ],
+    "DisabledLyricsFetchers": [],
+    "LyricsFetcherOrder": [],
+    "PathInfos": [
+      {
+        "Path": "文件夹路径"
+      }
+    ],
+    "ContentType": "movies"
+  }
+}

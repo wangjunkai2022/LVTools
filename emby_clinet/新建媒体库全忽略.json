@@ -1,0 +1,88 @@
+{
+  "LibraryOptions": {
+    "EnableArchiveMediaFiles": false,
+    "EnablePhotos": true,
+    "ImportPlaylists": true,
+    "EnableRealtimeMonitor": false,
+    "ExtractChapterImagesDuringLibraryScan": false,
+    "EnableChapterImageExtraction": false,
+    "EnableMarkerDetectionDuringLibraryScan": false,
+    "EnableMarkerDetection": false,
+    "SaveLocalThumbnailSets": false,
+    "ThumbnailImagesIntervalSeconds": "10",
+    "DownloadImagesInAdvance": false,
+    "EnableInternetProviders": true,
+    "ImportMissingEpisodes": false,
+    "SaveLocalMetadata": false,
+    "EnableAutomaticSeriesGrouping": true,
+    "PreferredMetadataLanguage": "",
+    "PreferredImageLanguage": "",
+    "MetadataCountryCode": "",
+    "SeasonZeroDisplayName": "Specials",
+    "AutomaticRefreshIntervalDays": 0,
+    "EnableEmbeddedTitles": false,
+    "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+    "SkipSubtitlesIfAudioTrackMatches": false,
+    "SaveSubtitlesWithMedia": false,
+    "SaveLyricsWithMedia": true,
+    "SubtitleDownloadMaxAgeDays": "0",
+    "LyricsDownloadMaxAgeDays": "0",
+    "RequirePerfectSubtitleMatch": false,
+    "ForcedSubtitlesOnly": false,
+    "EnableAudioResume": false,
+    "MinResumePct": "3",
+    "MaxResumePct": "90",
+    "MinResumeDurationSeconds": "120",
+    "MusicFolderStructure": null,
+    "ImportCollections": false,
+    "SaveMetadataHidden": false,
+    "EnableAdultMetadata": false,
+    "MinCollectionItems": 2,
+    "MetadataSavers": [],
+    "TypeOptions": [
+      {
+        "Type": "Movie",
+        "MetadataFetchers": [],
+        "MetadataFetcherOrder": [
+          "TheMovieDb",
+          "TheTVDB",
+          "The Open Movie Database",
+          "Douban Emby Movie Provider",
+          "JavScraper"
+        ],
+        "ImageFetchers": [],
+        "ImageFetcherOrder": [
+          "TheTVDB",
+          "TheMovieDb",
+          "FanArt",
+          "Douban Emby Image Provider",
+          "JavScraper",
+          "The Open Movie Database",
+          "Screen Grabber"
+        ]
+      }
+    ],
+    "LocalMetadataReaderOrder": [
+      "Nfo"
+    ],
+    "SubtitleDownloadLanguages": [],
+    "LyricsDownloadLanguages": [],
+    "DisabledLocalMetadataReaders": [
+      "Nfo"
+    ],
+    "DisabledSubtitleFetchers": [
+      "Open Subtitles"
+    ],
+    "SubtitleFetcherOrder": [
+      "Open Subtitles"
+    ],
+    "DisabledLyricsFetchers": [],
+    "LyricsFetcherOrder": [],
+    "PathInfos": [
+      {
+        "Path": "文件夹路径"
+      }
+    ],
+    "ContentType": "movies"
+  }
+}
