@@ -9,7 +9,7 @@
     "EnableMarkerDetectionDuringLibraryScan": false,
     "EnableMarkerDetection": false,
     "SaveLocalThumbnailSets": true,
-    "ThumbnailImagesIntervalSeconds": "-1",
+    "ThumbnailImagesIntervalSeconds": "10",
     "DownloadImagesInAdvance": false,
     "EnableInternetProviders": true,
     "ImportMissingEpisodes": false,
@@ -45,15 +45,17 @@
       {
         "Type": "Movie",
         "MetadataFetchers": [
-          "TheMovieDb",
           "TheTVDB",
+          "TheMovieDb",
+          "MetaTube",
           "The Open Movie Database",
           "Douban Emby Movie Provider",
           "JavScraper"
         ],
         "MetadataFetcherOrder": [
-          "TheMovieDb",
           "TheTVDB",
+          "TheMovieDb",
+          "MetaTube",
           "The Open Movie Database",
           "Douban Emby Movie Provider",
           "JavScraper"
@@ -61,6 +63,7 @@
         "ImageFetchers": [
           "TheTVDB",
           "TheMovieDb",
+          "MetaTube",
           "FanArt",
           "Douban Emby Image Provider",
           "JavScraper",
@@ -70,6 +73,7 @@
         "ImageFetcherOrder": [
           "TheTVDB",
           "TheMovieDb",
+          "MetaTube",
           "FanArt",
           "Douban Emby Image Provider",
           "JavScraper",

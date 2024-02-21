@@ -85,13 +85,13 @@ remove_MacOs_File() {
       rm "$file"
     done
 
-  find "$path" -depth -name "*(*).*" -type f |
+  find "$path" -depth -name "*([0-9]*).*" -type f |
     while IFS= read -r file; do
       echo "删除文件$file"
       rm "$file"
     done
 
-  find "$path" -depth -name "*(*)" -type d |
+  find "$path" -depth -name "*([0-9]*)" -type d |
     while IFS= read -r dir; do
       echo "删除文件$dir"
       rm -rf "$dir"
@@ -229,6 +229,20 @@ find_all_video_rename_2_nfo() {
     done
 }
 
+# 删除所有视频是大小是0的视频文件和父文件夹
+remove_all_size_move0_folder() {
+  path=$1
+  if [ ! -d "$path" ]; then
+    echo "$path 路径不存在"
+    exit 1
+  fi
+  find "$path" -name "*.mp4" -type f -size -1 |
+    while IFS= read -r zero_file; do
+      dir_name=$(dirname "$zero_file")
+      rm -rf "$dir_name"
+    done
+}
+
 path=$1
 # 路径中删除最后的/
 if echo "$path" | grep -q -E '\/$'; then
@@ -237,8 +251,8 @@ fi
 
 #remove_MacOs_File $path
 #remove_all_space2_ $path
-#folder_remove_child1leave $path
-folder_organizer_max50G $path
+folder_remove_child1leave $path
+#folder_organizer_max50G $path
 #echo "$path"
 #move_failed_to_folder $path
 #find_Have_rename $path

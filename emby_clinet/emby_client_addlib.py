@@ -12,6 +12,9 @@ import urllib
 server_url = ''
 api_key = ''
 
+if server_url.endswith("/"):
+    server_url = server_url[0:-1]
+
 
 def 读取新建媒体Json(文件名字: str):
     if not 文件名字.endswith("json"):
@@ -23,23 +26,44 @@ def 读取新建媒体Json(文件名字: str):
     return jsonData
 
 
+def 删除电影库(库id: str):
+    url = f"{server_url}/emby/Library/VirtualFolders/Delete?refreshLibrary=true&id={库id}&api_key={api_key}"
+    response = requests.post(
+        url,
+        verify=False)
+    if response.status_code == 204:
+        print("删除电影库成功")
+        return True
+    else:
+        print("删除电影库失败")
+        return False
+
+
+def 删除所有电影库():
+    for lib in 获取所有的媒体库():
+        删除电影库(lib["ItemId"])
+
+
 # 创建类型 1 全选属性 其他忽略属性
 def 新建一个路径到电影媒体库(库名字: str, 路径: str, 创建类型: int = 1):
     url_encoded_text = urllib.parse.quote(库名字.encode('utf-8'))
-    print(url_encoded_text)
     url = f"{server_url}/emby/Library/VirtualFolders?collectionType=movies&refreshLibrary=true&name={url_encoded_text}&api_key={api_key}&X-Emby-Language=zh-cn&reqformat=json"
     # 构建请求体
-    jsonData = 读取新建媒体Json(创建类型 == 1 and "新建媒体库全选" or "新建媒体库全忽略")
-    jsonData["LibraryOptions"]["PathInfos"][0]["Path"] = 路径
-    data = json.dumps(jsonData)
+    json_data = 读取新建媒体Json(创建类型 == 1 and "新建媒体库全选" or "新建媒体库全忽略")
+    json_data["LibraryOptions"]["PathInfos"][0]["Path"] = 路径
     response = requests.post(
         url,
-        json=data,
+        json=json_data,
         verify=False)
-    print(f"请求添加媒体库完毕结果：{response}\n库名字:{库名字}\n路径是:{路径}")
+    if response.status_code == 204:
+        print(f"请求添加媒体库成功：{response}\n库名字:{库名字}\n路径是:{路径}")
+        return True
+    else:
+        print(f"请求添加媒体库失败：{response}\n库名字:{库名字}\n路径是:{路径}")
+        return False
 
 
-def 获取指定名字的媒体库(名字):
+def 获取指定名字的媒体库(名字: str):
     for item in 获取所有的媒体库():
         if item["Name"] == 名字:
             return item
@@ -63,8 +87,9 @@ def 刷新媒体库(媒体库名字: str):
 
 
 if __name__ == "__main__":
-    for number in range(1, 53):
-        新建一个路径到电影媒体库(f"三级电影_{number}", f"/Volumes/dav/影视一/影视/三级电影/max_folder_50G_{number}")
+    # 删除所有电影库()
+    for number in range(2, 9):
+        新建一个路径到电影媒体库(f"三级电影_{number}", f"/mnt/alist/影视一/影视/三级电影/max_folder_50G_{number}", 1)
     # for number in range(1, 53):
     #     # 刷新媒体库("三级电影_max_folder_50G_50")
     #     print(number)
