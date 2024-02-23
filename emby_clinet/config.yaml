@@ -1,0 +1,6 @@
+emby:
+  domain: "http://localhost:8096/"
+  api: "a266155376d84eccba643c276b4939b3"
+aws:
+  aws_access_key_id: ""
+  aws_secret_access_key: ""

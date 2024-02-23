@@ -7,29 +7,22 @@ import time
 import json
 
 import urllib
+from config import emby_domain, emby_key
+import aws
+
+aws_obj = None
 
 
 def 重启服务器():
-    import boto3
-    session = boto3.Session(
-        aws_access_key_id='',
-        aws_secret_access_key=''
-    )
-    ec2_client = session.client('ec2', region_name="ap-northeast-1")
-    # 列出所有的EC2实例
-    response = ec2_client.describe_instances()
-
-    # 打印所有的EC2实例信息
-    for reservation in response['Reservations']:
-        for instance in reservation['Instances']:
-            # print(instance)
-            ec2_client.reboot_instances(
-                InstanceIds=[instance.get("InstanceId")])
+    global aws_obj
+    if not aws_obj:
+        aws_obj = aws.aws()
+    aws_obj.重启所有实列()
 
 
 # emby服务器的URL和API密钥
-server_url = ''
-api_key = ''
+server_url = emby_domain
+api_key = emby_key
 
 if server_url.endswith("/"):
     server_url = server_url[0:-1]
@@ -45,17 +38,17 @@ def 读取新建媒体Json(文件名字: str):
     return jsonData
 
 
-def post(url="", json=None,verify=False):
+def post(url="", json=None, verify=False):
     response = requests.post(url, json=json, verify=verify)
     if response.status_code == 521:
         重启服务器()
         print("重启服务器中。。。。。。")
-        time.sleep(5*60)
+        time.sleep(5 * 60)
         return get(url, json)
-    elif response.status_code == 200 or  response.status_code == 204:
+    elif response.status_code == 200 or response.status_code == 204:
         return response
     else:
-        time.sleep(2*60)
+        time.sleep(2 * 60)
         print(f"访问超时{response}")
         return get(url, json)
 
@@ -65,15 +58,14 @@ def get(url=""):
     if response.status_code == 521:
         重启服务器()
         print("重启服务器中。。。。。。")
-        time.sleep(5*60)
+        time.sleep(5 * 60)
         return get(url, json)
-    elif response.status_code == 200 or  response.status_code == 204:
+    elif response.status_code == 200 or response.status_code == 204:
         return response
     else:
-        time.sleep(2*60)
+        time.sleep(2 * 60)
         print(f"访问超时{response}")
         return get(url, json)
-    
 
 
 def 删除电影库(库id: str):
@@ -232,17 +224,16 @@ def 判断扫描媒体库是否运行():
 
 
 if __name__ == "__main__":
-    # 判断是否有媒体库在不在等待()
+    print(判断是否有媒体库在不在等待())
     # 获取所有任务()
     # 刷新指定任务("Scan media library")
     # 删除所有电影库()
-    for number in range(5, 440):
-        while 判断扫描媒体库是否运行():
-            print("扫描媒体库在工作")
-            time.sleep(60)
-        if 新建一个路径到电影媒体库(f"色花堂-步兵无破解-50G-{number}", f"/mnt/alist/sehuatang无码无破解/JAV_output/max_folder_50G_{number}", 0):
-            time.sleep(5)
-
+    # for number in range(5, 440):
+    #     while 判断扫描媒体库是否运行():
+    #         print("扫描媒体库在工作")
+    #         time.sleep(60)
+    #     if 新建一个路径到电影媒体库(f"色花堂-步兵无破解-50G-{number}", f"/mnt/alist/sehuatang无码无破解/JAV_output/max_folder_50G_{number}", 0):
+    #         time.sleep(5)
 
 # for number in range(1, 53):
 #     # 刷新媒体库("三级电影_max_folder_50G_50")
