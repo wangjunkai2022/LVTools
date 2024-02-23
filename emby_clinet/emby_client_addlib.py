@@ -38,34 +38,34 @@ def 读取新建媒体Json(文件名字: str):
     return jsonData
 
 
-def post(url="", json=None, verify=False):
-    response = requests.post(url, json=json, verify=verify)
+def post(url="", data=None, json=None, **kwargs):
+    response = requests.post(url, data=data, json=json, **kwargs)
     if response.status_code == 521:
         重启服务器()
         print("重启服务器中。。。。。。")
         time.sleep(5 * 60)
-        return get(url, json)
+        return post(url, data=data, json=json, **kwargs)
     elif response.status_code == 200 or response.status_code == 204:
         return response
     else:
         time.sleep(2 * 60)
         print(f"访问超时{response}")
-        return get(url, json)
+        return post(url, data=data, json=json, **kwargs)
 
 
-def get(url=""):
-    response = requests.get(url, verify=False)
+def get(url="", params=None, **kwargs):
+    response = requests.get(url, params=params, **kwargs)
     if response.status_code == 521:
         重启服务器()
         print("重启服务器中。。。。。。")
         time.sleep(5 * 60)
-        return get(url, json)
+        return get(url, params=params, **kwargs)
     elif response.status_code == 200 or response.status_code == 204:
         return response
     else:
         time.sleep(2 * 60)
         print(f"访问超时{response}")
-        return get(url, json)
+        return get(url, params=params, **kwargs)
 
 
 def 删除电影库(库id: str):
