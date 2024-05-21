@@ -14,6 +14,8 @@ aws_obj = None
 
 
 def 重启服务器():
+    if True:
+        return
     global aws_obj
     if not aws_obj:
         aws_obj = aws.aws()
@@ -84,6 +86,7 @@ def 删除电影库(库id: str):
 def 删除所有电影库():
     for lib in 获取所有的媒体库():
         删除电影库(lib.get("ItemId"))
+        time.sleep(2)
 
 
 # 创建类型 1 全选属性 其他忽略属性
@@ -224,17 +227,17 @@ def 判断扫描媒体库是否运行():
 
 
 if __name__ == "__main__":
-    新建一个路径到电影媒体库("test", "/mnt/alist")
-    print(判断是否有媒体库在不在等待())
+    # 新建一个路径到电影媒体库("test", "/mnt/alist")
+    # print(判断是否有媒体库在不在等待())
     # 获取所有任务()
     # 刷新指定任务("Scan media library")
     # 删除所有电影库()
-    for number in range(5, 440):
-        while 判断扫描媒体库是否运行():
-            print("扫描媒体库在工作")
+    for number in range(20, 40):
+        # while 判断扫描媒体库是否运行():
+        #     print("扫描媒体库在工作")
+        #     time.sleep(60)
+        if 新建一个路径到电影媒体库(f"三级电影-{number}", f"/mnt/alist/影视一/影视/三级电影/max_folder_50G_{number}", 1):
             time.sleep(60)
-        if 新建一个路径到电影媒体库(f"色花堂-步兵无破解-50G-{number}", f"/mnt/alist/sehuatang无码无破解/JAV_output/max_folder_50G_{number}", 0):
-            time.sleep(5)
 
 # for number in range(1, 53):
 #     # 刷新媒体库("三级电影_max_folder_50G_50")

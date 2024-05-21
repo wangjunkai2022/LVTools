@@ -1,5 +1,7 @@
 #!/bin/bash
-
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+source /etc/profile
 hdds=(/dev/sdb /dev/sdc)
 
 function check() {
@@ -13,12 +15,12 @@ function check() {
   temp=${temp:0:2}
   ## 值是否大于50度
   if [ $temp -gt 50 ]; then
-    echo "$1 当前硬盘温度是 $temp 大于设置的温度50 现在执行关机."
+    echo $(date "+%Y%m%d %H:%M:%S") "$1 当前硬盘温度是 $temp 大于设置的温度50 现在执行关机."
     #    shutdown -h now
     poweroff
 
   else
-    echo "$1 当前硬盘温度是 $temp"
+    echo $(date "+%Y%m%d %H:%M:%S") "$1 当前硬盘温度是 $temp"
   fi
 
 }

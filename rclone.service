@@ -10,8 +10,10 @@ ExecStop=/bin/fusermount -uz /mnt/alist
 User=root
 Restart=always
 
+# 编辑
+ExecStart=rclone mount alist_webdav:/ /mnt/alist --cache-dir=/tmp/alist_cache --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 1s --vfs-cache-mode full --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 16M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
 # 搜库
-ExecStart=rclone mount alist_webdav:/ /mnt/alist --cache-dir=/tmp/alist_cache --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --vfs-cache-mode full --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 16M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
+#ExecStart=rclone mount alist_webdav:/ /mnt/alist --cache-dir=/tmp/alist_cache --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --vfs-cache-mode full --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 16M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
 # 播放
 #ExecStart=rclone mount alist_webdav:/ /mnt/alist --cache-dir=/tmp/alist_cache --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --vfs-cache-mode full --buffer-size 512M --vfs-read-chunk-size 16M --vfs-read-chunk-size-limit 64M --checkers=4 --transfers=1 --vfs-cache-max-size 10G
 
