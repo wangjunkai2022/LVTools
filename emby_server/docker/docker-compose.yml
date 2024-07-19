@@ -1,0 +1,87 @@
+# yaml 配置
+name: yoyo_media_server
+# version: '3.8'
+services:
+  yoyo_emby:
+    container_name: yoyo_emby
+    image: amilys/embyserver:latest
+    environment:
+    #   - HTTP_PROXY=${PROXY}
+    #   - HTTPS_PROXY=${PROXY}
+    #   - NO_PROXY=127.0.0.1,localhost,192.168.*
+    #   - PUID=0
+    #   - PGID=0
+        - TZ=Asia/Hong_Kong
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /var/lib/emby:/config
+      - /mnt:/mnt
+      - /media:/media
+    ports:
+      - 8096:8096
+    restart: unless-stopped
+    depends_on:
+       - yoyo_rclone
+       - yoyo_alist
+
+
+  yoyo_alist:
+    container_name: yoyo_alist
+    environment:
+      - TZ=Asia/Hong_Kong
+    image: xhofe/alist:latest
+    volumes:
+      - /opt/alist/data:/opt/alist/data
+      - /mnt:/mnt
+      - /media:/media
+    ports:
+      - 5244:5244
+    depends_on:
+      - yoyo_rclone
+    restart: unless-stopped
+    
+
+  yoyo_rclone:
+    container_name: yoyo_rclone
+    environment:
+      - TZ=Asia/Hong_Kong
+    image: rclone/rclone:latest
+    volumes:
+      - ~/.config/rclone:/config/rclone
+    devices:
+      - /dev/fuse:/dev/fuse
+      - /mnt:/data:shared
+    restart: unless-stopped
+    command: [
+      "mount",
+      "alist_webdav:/",
+      "/data",
+      "--allow-other",
+      "--allow-non-empty",
+      "--allow-root",
+      "--file-perms=0777",
+      "--multi-thread-streams=1024",
+      " --multi-thread-cutoff=128M",
+      "--vfs-cache-mode=full",
+      "--vfs-cache-max-size=10G",
+      "--vfs-cache-max-age=12h",
+      "--buffer-size=64K",
+      "--vfs-read-chunk-size=1M",
+      "--vfs-read-chunk-size-limit=50M",
+      "--no-modtime",
+      "--no-checksum",
+      "--vfs-read-wait=0ms",
+      "--ignore-size",
+      ]
+
+  yoyo_nginx:
+    container_name: yoyo_nginx
+    environment:
+      - TZ=Asia/Hong_Kong
+    image: nginx:latest
+    network_mode: host
+    volumes:
+      - /etc/nginx:/etc/nginx
+    restart: unless-stopped
+    
