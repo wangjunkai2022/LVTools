@@ -1,6 +1,5 @@
 # yaml 配置
 name: yoyo_media_server
-# version: '3.8'
 services:
   yoyo_emby:
     container_name: yoyo_emby
@@ -22,7 +21,7 @@ services:
       - 8096:8096
     restart: unless-stopped
     depends_on:
-       - yoyo_rclone
+       - yoyo_rclone_alist
        - yoyo_alist
 
 
@@ -38,50 +37,36 @@ services:
     ports:
       - 5244:5244
     depends_on:
-      - yoyo_rclone
+      - yoyo_rclone_alist
     restart: unless-stopped
     
-
-  yoyo_rclone:
-    container_name: yoyo_rclone
-    environment:
-      - TZ=Asia/Hong_Kong
+  yoyo_rclone_alist:
+    container_name: yoyo_rclone_alist
     image: rclone/rclone:latest
-    volumes:
-      - ~/.config/rclone:/config/rclone
-    devices:
-      - /dev/fuse:/dev/fuse
-      - /mnt:/data:shared
-    restart: unless-stopped
-    command: [
-      "mount",
-      "alist_webdav:/",
-      "/data",
-      "--allow-other",
-      "--allow-non-empty",
-      "--allow-root",
-      "--file-perms=0777",
-      "--multi-thread-streams=1024",
-      " --multi-thread-cutoff=128M",
-      "--vfs-cache-mode=full",
-      "--vfs-cache-max-size=10G",
-      "--vfs-cache-max-age=12h",
-      "--buffer-size=64K",
-      "--vfs-read-chunk-size=1M",
-      "--vfs-read-chunk-size-limit=50M",
-      "--no-modtime",
-      "--no-checksum",
-      "--vfs-read-wait=0ms",
-      "--ignore-size",
-      ]
-
-  yoyo_nginx:
-    container_name: yoyo_nginx
-    environment:
-      - TZ=Asia/Hong_Kong
-    image: nginx:latest
     network_mode: host
     volumes:
-      - /etc/nginx:/etc/nginx
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - .config/rclone:/config/rclone
+      - /mnt:/data:shared
+    devices:
+      - /dev/fuse:/dev/fuse
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
     restart: unless-stopped
+    command: mount alist_webdav:/ /data --allow-other --allow-non-empty --file-perms 0777 --multi-thread-streams 1024 --multi-thread-cutoff 128M --network-mode --vfs-cache-mode full --vfs-cache-max-size 10G --vfs-cache-max-age 12h --buffer-size 64K --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 50M --no-modtime --no-checksum --vfs-read-wait 0ms -v --ignore-size
+
+
+  # yoyo_nginx:
+  #   container_name: yoyo_nginx
+  #   environment:
+  #     - TZ=Asia/Hong_Kong
+  #   image: nginx:latest
+  #   network_mode: host
+  #   volumes:
+  #     - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+  #     - /etc/nginx:/etc/nginx
+  #   restart: unless-stopped
     
