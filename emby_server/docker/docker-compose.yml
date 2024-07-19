@@ -59,14 +59,20 @@ services:
     command: mount alist_webdav:/ /data --allow-other --allow-non-empty --file-perms 0777 --multi-thread-streams 1024 --multi-thread-cutoff 128M --network-mode --vfs-cache-mode full --vfs-cache-max-size 10G --vfs-cache-max-age 12h --buffer-size 64K --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 50M --no-modtime --no-checksum --vfs-read-wait 0ms -v --ignore-size
 
 
-  # yoyo_nginx:
-  #   container_name: yoyo_nginx
-  #   environment:
-  #     - TZ=Asia/Hong_Kong
-  #   image: nginx:latest
-  #   network_mode: host
-  #   volumes:
-  #     - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf
-  #     - /etc/nginx:/etc/nginx
-  #   restart: unless-stopped
+  yoyo_nginx:
+    container_name: yoyo_nginx
+    environment:
+      - TZ=Asia/Hong_Kong
+    image: nginx:latest
+    network_mode: host
+    depends_on:
+      - yoyo_emby
+    volumes:
+      # - /etc/nginx:/etc/nginx
+      - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/nginx/emby2alist:/etc/nginx/emby2alist/
+      - /etc/nginx/conf.d:/etc/nginx/conf.d
+      - /etc/nginx/logs/debug:/etc/nginx/logs/debug
+      - /var/cache/nginx/emby:/var/cache/nginx/emby
+    restart: unless-stopped
     
