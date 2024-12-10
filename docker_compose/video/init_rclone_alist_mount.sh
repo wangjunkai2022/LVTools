@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # 检查 rclone 的配置文件路径
 CONFIG_FILE="/config/rclone/rclone.conf"
