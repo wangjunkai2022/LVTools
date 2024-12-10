@@ -1,7 +1,7 @@
 FROM rclone/rclone:latest
 
 # 将初始化脚本复制到容器中
-COPY init_rclone_alist_mount.sh /init_rclone_alist_mount.sh
+COPY ./init_rclone_alist_mount.sh /init_rclone_alist_mount.sh
 
 # 设置脚本为可执行
 RUN chmod +x /init_rclone_alist_mount.sh
