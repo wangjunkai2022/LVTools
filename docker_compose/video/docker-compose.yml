@@ -74,8 +74,3 @@ services:
     #   --log-file /config/log/log.txt
     depends_on:
        - alist
-
-networks:
-  default:
-    external:
-      name: media_network  # 使用自定义网络（可选）
