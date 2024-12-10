@@ -1,0 +1,81 @@
+version: '3.8'
+name: media
+services:
+  embyserver:
+    container_name: embyserver
+    image: xiaokai2022/embyserver:latest
+    environment:
+      - HTTP_PROXY=${PROXY}
+      - HTTPS_PROXY=${PROXY}
+      - NO_PROXY=127.0.0.1,localhost,192.168.*
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ${PATH_CONFIG}/embyserver:/config
+      - ${PATH_MEDIA}:/media:shared
+    ports:
+      - 8096:8096
+    restart: always
+    depends_on:
+       - rclone_alist_mount
+
+  alist:
+    container_name: alist
+    image: xhofe/alist:latest
+    volumes:
+      - ${PATH_CONFIG}/alist:/opt/alist/data
+      - ${PATH_MEDIA}:/mnt:shared #这里可以读取本地文件 方便alist挂载访问
+    ports:
+      - 5244:5244
+    restart: always
+
+  # rclone 挂载需要先配置rclone的配置文件 并保存配置文件到 ${PATH_CONFIG}/rclone_alist_mount/config
+  rclone_alist_mount:
+    container_name: rclone_alist_mount
+    # image: rclone/rclone:latest
+    build:
+      context: .  # 指向当前目录
+      dockerfile: Dockerfile.rclone_alist_mount  # 使用指定的 Dockerfile
+    volumes:
+      - ${PATH_CONFIG}/rclone_alist_mount/config:/config/rclone
+      - ${PATH_CONFIG}/rclone_alist_mount/log:/config/log
+      - ${PATH_CONFIG}/rclone_alist_mount/cache:/cache
+      - ${PATH_MEDIA}/rclone_alist_mount:/data:shared
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+    devices:
+      - /dev/fuse
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    restart: always
+    entrypoint: ["/bin/bash", "-c", "/init_rclone_alist_mount.sh && rclone mount alist_webdav:/ /data --cache-dir /cache --allow-other --allow-root --allow-non-empty --file-perms 0777 --multi-thread-streams 1024 --multi-thread-cutoff 128M --vfs-cache-mode full --vfs-cache-max-size 100G --vfs-cache-max-age 12h --buffer-size 64K --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 50M --no-modtime --no-checksum --vfs-read-wait 0ms --ignore-size --log-file /config/log/log.txt"]
+    # command: >
+    #   mount alist_webdav:/ /data
+    #   --cache-dir /cache
+    #   --allow-other
+    #   --allow-root
+    #   --allow-non-empty
+    #   --file-perms 0777
+    #   --multi-thread-streams 1024
+    #   --multi-thread-cutoff 128M
+    #   --network-mode
+    #   --vfs-cache-mode full
+    #   --vfs-cache-max-size 100G
+    #   --vfs-cache-max-age 12h
+    #   --buffer-size 64K
+    #   --vfs-read-chunk-size 1M
+    #   --vfs-read-chunk-size-limit 50M
+    #   --no-modtime
+    #   --no-checksum
+    #   --vfs-read-wait 0ms
+    #   --ignore-size
+    #   --log-file /config/log/log.txt
+    depends_on:
+       - alist
+
+networks:
+  default:
+    external:
+      name: media_network  # 使用自定义网络（可选）

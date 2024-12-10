@@ -1,0 +1,6 @@
+#这里设置代理的地址
+PROXY=http://localhost:10808
+#这里是设置media的root地址
+PATH_MEDIA=./data/
+#配置文件路径
+PATH_CONFIG=./.config/

@@ -1,0 +1,10 @@
+FROM rclone/rclone:latest
+
+# 将初始化脚本复制到容器中
+COPY init_rclone_alist_mount.sh /init_rclone_alist_mount.sh
+
+# 设置脚本为可执行
+RUN chmod +x /init_rclone_alist_mount.sh
+
+# 设置入口点
+# ENTRYPOINT ["/bin/sh", "-c", "/init_rclone_alist_mount.sh && rclone mount alist_webdav:/ /data --cache-dir /cache --allow-other --allow-root --allow-non-empty --file-perms 0777 --multi-thread-streams 1024 --multi-thread-cutoff 128M --vfs-cache-mode full --vfs-cache-max-size 100G --vfs-cache-max-age 12h --buffer-size 64K --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 50M --no-modtime --no-checksum --vfs-read-wait 0ms --ignore-size --log-file /config/log/log.txt"]
