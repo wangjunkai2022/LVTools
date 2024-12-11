@@ -22,6 +22,8 @@ services:
   alist:
     container_name: alist
     image: xhofe/alist:latest
+    environment:
+      - ALIST_PASSWORD=${ALIST_PASSWORD}
     build:
       context: .  # 指向当前目录
       dockerfile: Dockerfile.alist  # 使用指定的 Dockerfile
