@@ -22,6 +22,9 @@ services:
   alist:
     container_name: alist
     image: xhofe/alist:latest
+    environment:
+      - ALIST_PASSWORD=${ALIST_PASSWORD}   # 设置管理员密码
+      - ALIST_WEBDAV_ENABLE=true                # 启用 WebDAV (可选)
     volumes:
       - ${PATH_CONFIG}/alist:/opt/alist/data
       - ${PATH_MEDIA}:/mnt:shared #这里可以读取本地文件 方便alist挂载访问
@@ -39,6 +42,8 @@ services:
       dockerfile: Dockerfile.rclone_alist_mount  # 使用指定的 Dockerfile
     environment:
       - MOUNT_POINT=/data
+      - REMOTE_NAME=alist_webdav
+      - ALIST_PASSWORD=${ALIST_PASSWORD}
     volumes:
       - ${PATH_CONFIG}/rclone_alist_mount/config:/config/rclone
       - ${PATH_CONFIG}/rclone_alist_mount/log:/config/log

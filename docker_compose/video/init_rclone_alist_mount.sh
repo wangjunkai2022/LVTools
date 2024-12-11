@@ -1,33 +1,51 @@
 #!/bin/sh
+
+# 定义要检查的远程配置名称
+# REMOTE_NAME="alist_webdav"
+
 function init_conf(){
     echo "初始化 rclone"
-    # 检查 rclone 的配置文件路径
-    CONFIG_FILE="/config/rclone/rclone.conf"
+#     # 检查 rclone 的配置文件路径
+#     CONFIG_FILE="/config/rclone/rclone.conf"
 
-    # 检查是否存在 alist_webdav 配置
-    if ! grep -q "alist_webdav" "$CONFIG_FILE"; then
-        echo "Creating rclone configuration for alist_webdav..."
+#     # 检查是否存在 alist_webdav 配置
+#     if ! grep -q "alist_webdav" "$CONFIG_FILE"; then
+#         echo "Creating rclone configuration for alist_webdav..."
 
-        # 添加 alist_webdav 配置（请根据实际需要调整参数）
-    cat <<EOL >> "$CONFIG_FILE"
-[alist_webdav]
-type = webdav
-url = http://alist:5244/dav
-vendor = other
-user = guest  # 替换为你的用户名
-pass = qsDWbInzy1zmqR9uMlCWLGOCSMLz   # 替换为你的密码（如果有）
-EOL
+#         # 添加 alist_webdav 配置（请根据实际需要调整参数）
+#     cat <<EOL >> "$CONFIG_FILE"
+# [alist_webdav]
+# type = webdav
+# url = http://alist:5244/dav
+# vendor = other
+# user = guest  # 替换为你的用户名
+# pass = qsDWbInzy1zmqR9uMlCWLGOCSMLz   # 替换为你的密码（如果有）
+# EOL
 
-        echo "Configuration for alist_webdav created."
+#         echo "Configuration for alist_webdav created."
+#     else
+#         echo "alist_webdav configuration already exists."
+#     fi
+
+    # 检查 rclone 配置中是否存在该远程
+    if rclone listremotes | grep -q "$REMOTE_NAME"; then
+        echo "远程配置 '$REMOTE_NAME' 已存在。"
     else
-        echo "alist_webdav configuration already exists."
+        # 如果不存在，则创建新的 WebDAV 配置
+        echo "远程配置 '$REMOTE_NAME' 不存在，正在创建..."
+        rclone config create "$REMOTE_NAME" webdav url=http://alist:5244/dav user=admin pass=${ALIST_PASSWORD}
+        if [ $? -eq 0 ]; then
+            echo "远程配置 '$REMOTE_NAME' 创建成功！"
+        else
+            echo "远程配置 '$REMOTE_NAME' 创建失败！"
+        fi
     fi
 }
 
 # 判断是否能连接成功
 function check_content(){
-    echo 判断alist_webdav是否配置能连接成功
-    rclone lsd alist_webdav:/
+    echo 判断${REMOTE_NAME}是否配置能连接成功
+    rclone lsd ${REMOTE_NAME}:/
     return $?
 }
 
@@ -67,8 +85,8 @@ function unmount_rclone(){
     fi
 }
 function mount_rclone(){
-    echo 开始挂载alist_webdav到路径${MOUNT_POINT}下
-    rclone mount alist_webdav:/ ${MOUNT_POINT} \
+    echo 开始挂载${REMOTE_NAME}到路径${MOUNT_POINT}下
+    rclone mount ${REMOTE_NAME}:/ ${MOUNT_POINT} \
         --cache-dir /cache \
         --allow-other \
         --allow-root \
