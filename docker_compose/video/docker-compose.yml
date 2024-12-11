@@ -53,6 +53,7 @@ services:
     security_opt:
       - apparmor:unconfined
     restart: always
+    entrypoint: ["/bin/sh", "-c", "/init_rclone_alist_mount.sh"]
     # entrypoint: ["/bin/sh", "-c", "/init_rclone_alist_mount.sh && rclone mount alist_webdav:/ /data --cache-dir /cache --allow-other --allow-root --allow-non-empty --file-perms 0777 --multi-thread-streams 1024 --multi-thread-cutoff 128M --vfs-cache-mode full --vfs-cache-max-size 100G --vfs-cache-max-age 12h --buffer-size 64K --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 50M --no-modtime --no-checksum --vfs-read-wait 0ms --ignore-size --log-file /config/log/log.txt"]
     # command: >
     #   mount alist_webdav:/ /data
