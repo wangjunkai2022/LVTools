@@ -109,11 +109,7 @@ function mount_rclone(){
         --log-file /config/log/log.txt
 
     if [ $? -eq 0 ]; then
-        echo "挂载到$MOUNT_POINT 成功..."
-        while true; do
-            sleep 999999
-        fi
-    done
+        echo "挂载到$MOUNT_POINT 完毕..."
     else
         echo "挂载到$MOUNT_POINT 失败..."
         unmount_rclone
