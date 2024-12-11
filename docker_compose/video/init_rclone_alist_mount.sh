@@ -106,7 +106,7 @@ function mount_rclone(){
         --vfs-read-wait 0ms \
         -v \
         --ignore-size \
-        -d \
+        --daemon \
         --log-file /config/log/log.txt
 
     if [ $? -eq 0 ]; then
