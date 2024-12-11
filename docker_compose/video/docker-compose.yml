@@ -22,11 +22,9 @@ services:
   alist:
     container_name: alist
     image: xhofe/alist:latest
-    # build:
-    #   context: .  # 指向当前目录
-    #   dockerfile: Dockerfile.alist  # 使用指定的 Dockerfile
-    env_file:
-      - .env
+    build:
+      context: .  # 指向当前目录
+      dockerfile: Dockerfile.alist  # 使用指定的 Dockerfile
     volumes:
       - ${PATH_CONFIG}/alist:/opt/alist/data
       - ${PATH_MEDIA}:/mnt:shared #这里可以读取本地文件 方便alist挂载访问

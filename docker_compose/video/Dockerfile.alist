@@ -1,0 +1,7 @@
+FROM xhofe/alist:latest
+
+# 将初始化脚本复制到容器中
+COPY ./alist_entrypoint.sh /entrypoint.sh
+
+# 设置脚本为可执行
+RUN chmod +x /entrypoint.sh
