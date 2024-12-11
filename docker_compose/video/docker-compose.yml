@@ -28,14 +28,17 @@ services:
     ports:
       - 5244:5244
     restart: always
-
-  # rclone 挂载需要先配置rclone的配置文件 并保存配置文件到 ${PATH_CONFIG}/rclone_alist_mount/config
+  # rclone挂载需要先安装fuse
+  # alist 开启guset并打开webdav的无密码访问
+  # rclone 挂载需要先配置rclone的配置文件 并保存配置文件到 ${PATH_CONFIG}/rclone_alist_mount/config 
   rclone_alist_mount:
     container_name: rclone_alist_mount
     # image: rclone/rclone:latest
     build:
       context: .  # 指向当前目录
       dockerfile: Dockerfile.rclone_alist_mount  # 使用指定的 Dockerfile
+    environment:
+      - MOUNT_POINT=/data
     volumes:
       - ${PATH_CONFIG}/rclone_alist_mount/config:/config/rclone
       - ${PATH_CONFIG}/rclone_alist_mount/log:/config/log
@@ -50,7 +53,7 @@ services:
     security_opt:
       - apparmor:unconfined
     restart: always
-    entrypoint: ["/bin/sh", "-c", "/init_rclone_alist_mount.sh && rclone mount alist_webdav:/ /data --cache-dir /cache --allow-other --allow-root --allow-non-empty --file-perms 0777 --multi-thread-streams 1024 --multi-thread-cutoff 128M --vfs-cache-mode full --vfs-cache-max-size 100G --vfs-cache-max-age 12h --buffer-size 64K --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 50M --no-modtime --no-checksum --vfs-read-wait 0ms --ignore-size --log-file /config/log/log.txt"]
+    # entrypoint: ["/bin/sh", "-c", "/init_rclone_alist_mount.sh && rclone mount alist_webdav:/ /data --cache-dir /cache --allow-other --allow-root --allow-non-empty --file-perms 0777 --multi-thread-streams 1024 --multi-thread-cutoff 128M --vfs-cache-mode full --vfs-cache-max-size 100G --vfs-cache-max-age 12h --buffer-size 64K --vfs-read-chunk-size 1M --vfs-read-chunk-size-limit 50M --no-modtime --no-checksum --vfs-read-wait 0ms --ignore-size --log-file /config/log/log.txt"]
     # command: >
     #   mount alist_webdav:/ /data
     #   --cache-dir /cache
@@ -74,3 +77,8 @@ services:
     #   --log-file /config/log/log.txt
     depends_on:
        - alist
+    healthcheck:
+      test: ["CMD", "check_rclone_state"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

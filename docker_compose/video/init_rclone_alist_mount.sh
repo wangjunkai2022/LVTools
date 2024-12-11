@@ -21,3 +21,45 @@ EOL
 else
     echo "alist_webdav configuration already exists."
 fi
+
+
+# 设置要检查的挂载点
+# MOUNT_POINT="/path/to/your/mount"
+
+# 检查是否已挂载
+if mountpoint -q "$MOUNT_POINT"; then
+    echo "正在取消挂载 $MOUNT_POINT ..."
+    
+    # 取消挂载 rclone
+    fusermount -u "$MOUNT_POINT" || umount "$MOUNT_POINT"
+    
+    if [ $? -eq 0 ]; then
+        echo "成功取消挂载 $MOUNT_POINT."
+    else
+        echo "取消挂载 $MOUNT_POINT 失败，请检查是否有其他进程占用该目录."
+    fi
+else
+    echo "$MOUNT_POINT 并未挂载."
+fi
+
+rclone mount alist_webdav:/ ${MOUNT_POINT} \
+    --cache-dir /cache \
+    --allow-other \
+    --allow-root \
+    --allow-non-empty \
+    --file-perms 0777 \
+    --multi-thread-streams 1024 \
+    --multi-thread-cutoff 128M \
+    --network-mode \
+    --vfs-cache-mode full \
+    --vfs-cache-max-size 100G \
+    --vfs-cache-max-age 12h \
+    --buffer-size 64K \
+    --vfs-read-chunk-size 1M \
+    --vfs-read-chunk-size-limit 50M \
+    --no-modtime \
+    --no-checksum \
+    --vfs-read-wait 0ms \
+    -v \
+    --ignore-size \
+    --log-file /config/log/log.txt
