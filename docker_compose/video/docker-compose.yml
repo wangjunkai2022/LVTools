@@ -22,6 +22,9 @@ services:
   alist:
     container_name: alist
     image: xhofe/alist:latest
+    # build:
+    #   context: .  # 指向当前目录
+    #   dockerfile: Dockerfile.alist  # 使用指定的 Dockerfile
     environment:
       - ALIST_PASSWORD=${ALIST_PASSWORD}   # 设置管理员密码
       - ALIST_WEBDAV_ENABLE=true                # 启用 WebDAV (可选)
@@ -30,6 +33,7 @@ services:
       - ${PATH_MEDIA}:/mnt:shared #这里可以读取本地文件 方便alist挂载访问
     ports:
       - 5244:5244
+    entrypoint: ["/bin/bash", "c", "alist admin set ${ALIST_PASSWORD} && alist serve --no-prefix"]
     restart: always
   # rclone挂载需要先安装fuse
   # alist 开启guset并打开webdav的无密码访问
