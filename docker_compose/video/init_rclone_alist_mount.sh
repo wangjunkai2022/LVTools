@@ -13,8 +13,8 @@ if ! grep -q "alist_webdav" "$CONFIG_FILE"; then
 type = webdav
 url = http://alist:5244/webdav
 vendor = other
-user = admin  # 替换为你的用户名
-pass = ''''   # 替换为你的密码（如果有）
+user = guest  # 替换为你的用户名
+pass = qsDWbInzy1zmqR9uMlCWLGOCSMLz   # 替换为你的密码（如果有）
 EOL
 
     echo "Configuration for alist_webdav created."
