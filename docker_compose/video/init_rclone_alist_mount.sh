@@ -24,17 +24,39 @@ EOL
     fi
 }
 
+# 判断是否能连接成功
+function check_content(){
+    echo 判断alist_webdav是否配置能连接成功
+    rclone lsd alist_webdav:/
+    return $?
+}
+
+# 每 60 秒执行一次检测 check_content 的返回值是否是 0
+function wait_conten_ok(){
+    while true; do
+        # 调用 check_content 函数
+        check_content
+        # 获取 check_content 的返回值
+        if [ $? -eq 0 ]; then
+            echo "连接成功，退出循环"
+            break  # 返回值为 0，表示连接成功，退出循环
+        else
+            echo "连接失败，等待 10 秒后重试"
+            sleep 10  # 如果连接失败，等待 10 秒后重试
+        fi
+    done
+}
+
 # 设置要检查的挂载点
 # MOUNT_POINT="/path/to/your/mount"
 
 # 检查是否已挂载
 function unmount_rclone(){
-    if mountpoint -q "$MOUNT_POINT"; then
+    mountpoint "$MOUNT_POINT"
+    if [ $? -eq 0 ]; then
         echo "正在取消挂载 $MOUNT_POINT ..."
-        
         # 取消挂载 rclone
-        fusermount -u "$MOUNT_POINT" || umount "$MOUNT_POINT"
-        
+        fusermount3 -zu "$MOUNT_POINT"
         if [ $? -eq 0 ]; then
             echo "成功取消挂载 $MOUNT_POINT."
         else
@@ -69,6 +91,6 @@ function mount_rclone(){
         --log-file /config/log/log.txt
 }
 init_conf
+wait_conten_ok
 unmount_rclone
-sleep 120
 mount_rclone
