@@ -92,5 +92,5 @@ function mount_rclone(){
 }
 init_conf
 wait_conten_ok
-unmount_rclone
+# unmount_rclone
 mount_rclone
