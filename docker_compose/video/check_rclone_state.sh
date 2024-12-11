@@ -14,9 +14,9 @@
 
 
 # 获取文件夹下的文件个数
-FILE_COUNT=$(find "$MOUNT_POINT" -maxdepth 0 -type d | wc -l)
+FILE_COUNT=$(find "$MOUNT_POINT" -maxdepth 1 -type d | wc -l)
 # 检查文件个数是否大于 0
-if [ "$FILE_COUNT" -gt 0 ]; then
+if [ "$FILE_COUNT" -gt 1 ]; then
     exit 0
 else
     exit 1
