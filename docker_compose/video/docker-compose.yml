@@ -33,7 +33,7 @@ services:
       - ${PATH_MEDIA}:/mnt:shared #这里可以读取本地文件 方便alist挂载访问
     ports:
       - 5244:5244
-    entrypoint: ["/bin/bash", "-c", "alist admin set ${ALIST_PASSWORD} && alist serve --no-prefix"]
+    entrypoint: ["/bin/bash", "-c", "/opt/alist admin set ${ALIST_PASSWORD} && /opt/alist serve --no-prefix"]
     restart: always
   # rclone挂载需要先安装fuse
   # alist 开启guset并打开webdav的无密码访问
