@@ -43,6 +43,7 @@ else
     echo "$MOUNT_POINT 并未挂载."
 fi
 
+echo 开始挂载alist_webdav到路径${MOUNT_POINT}下
 rclone mount alist_webdav:/ ${MOUNT_POINT} \
     --cache-dir /cache \
     --allow-other \
