@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo "初始化 rclone"
 # 检查 rclone 的配置文件路径
 CONFIG_FILE="/config/rclone/rclone.conf"
 

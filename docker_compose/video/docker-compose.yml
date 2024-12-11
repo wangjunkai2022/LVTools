@@ -78,7 +78,7 @@ services:
     depends_on:
        - alist
     healthcheck:
-      test: ["CMD", "check_rclone_state"]
+      test: ["CMD", "/check_rclone_state.sh"]
       interval: 30s
       timeout: 10s
       retries: 3
