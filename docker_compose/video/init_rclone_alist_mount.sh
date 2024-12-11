@@ -88,7 +88,18 @@ function mount_rclone(){
         --vfs-read-wait 0ms \
         -v \
         --ignore-size \
+        -d \
         --log-file /config/log/log.txt
+
+    if [ $? -eq 0 ]; then
+        echo "挂载到$MOUNT_POINT 成功..."
+    else
+        echo "挂载到$MOUNT_POINT 失败..."
+        unmount_rclone
+        echo "等待120秒重新挂载"
+        sleep 120
+        mount_rclone
+    fi
 }
 init_conf
 wait_conten_ok
