@@ -4,11 +4,8 @@ chown -R ${PUID}:${PGID} /opt/alist/
 
 umask ${UMASK}
 
-
-if [ "$1" = "version" ]; then
-    ./alist version
-else
-    exec su-exec ${PUID}:${PGID} ./alist server --no-prefix
+echo alist启动入口修改版
+echo alist 服务启动完毕
     # 检查是否为第一次启动，通过查看一个特定文件是否存在
     if [ ! -f /opt/alist/.initialized ]; then
         # 检查 ALIST_PASSWORD 环境变量是否存在
@@ -21,4 +18,9 @@ else
         fi
         touch /opt/alist/.initialized  # 创建标记文件，表示已初始化
     fi
+    
+if [ "$1" = "version" ]; then
+    ./alist version
+else
+    exec su-exec ${PUID}:${PGID} ./alist server --no-prefix
 fi
